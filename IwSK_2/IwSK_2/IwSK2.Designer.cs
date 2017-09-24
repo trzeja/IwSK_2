@@ -33,11 +33,11 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.gbMaster = new System.Windows.Forms.GroupBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.btnConfigure = new System.Windows.Forms.Button();
+            this.btnConfigureMaster = new System.Windows.Forms.Button();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
-            this.nudTimeConstraint = new System.Windows.Forms.NumericUpDown();
+            this.nudTimeConstraintMaster = new System.Windows.Forms.NumericUpDown();
             this.label6 = new System.Windows.Forms.Label();
             this.nudRetransmissions = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
@@ -47,25 +47,47 @@
             this.rbBroadcast = new System.Windows.Forms.RadioButton();
             this.rbAddressed = new System.Windows.Forms.RadioButton();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.cbCommands = new System.Windows.Forms.ComboBox();
+            this.cbCommandMaster = new System.Windows.Forms.ComboBox();
             this.cbAddress = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.gbSlave = new System.Windows.Forms.GroupBox();
             this.label9 = new System.Windows.Forms.Label();
-            this.tbTransmitedData = new System.Windows.Forms.TextBox();
-            this.btnSend = new System.Windows.Forms.Button();
-            this.tbRecievedData = new System.Windows.Forms.TextBox();
+            this.tbTransmitedDataMaster = new System.Windows.Forms.TextBox();
+            this.btnSendMaster = new System.Windows.Forms.Button();
+            this.tbRecievedDataMaster = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.tbRecievedDataSlave = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.btnSendSlave = new System.Windows.Forms.Button();
+            this.tbTransmitedDataSlave = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.btnConfigureSlave = new System.Windows.Forms.Button();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.nudTimeConstraintSlave = new System.Windows.Forms.NumericUpDown();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.label18 = new System.Windows.Forms.Label();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.nudAdddress = new System.Windows.Forms.NumericUpDown();
+            this.cbCommandSlave = new System.Windows.Forms.ComboBox();
+            this.label17 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.gbMaster.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBox5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudTimeConstraint)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudTimeConstraintMaster)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudRetransmissions)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTimeout)).BeginInit();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            this.gbSlave.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudTimeConstraintSlave)).BeginInit();
+            this.groupBox7.SuspendLayout();
+            this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAdddress)).BeginInit();
             this.SuspendLayout();
             // 
             // rbMaster
@@ -104,10 +126,10 @@
             // 
             // gbMaster
             // 
-            this.gbMaster.Controls.Add(this.tbRecievedData);
+            this.gbMaster.Controls.Add(this.tbRecievedDataMaster);
             this.gbMaster.Controls.Add(this.label3);
-            this.gbMaster.Controls.Add(this.btnSend);
-            this.gbMaster.Controls.Add(this.tbTransmitedData);
+            this.gbMaster.Controls.Add(this.btnSendMaster);
+            this.gbMaster.Controls.Add(this.tbTransmitedDataMaster);
             this.gbMaster.Controls.Add(this.label9);
             this.gbMaster.Controls.Add(this.panel1);
             this.gbMaster.Location = new System.Drawing.Point(12, 12);
@@ -121,7 +143,7 @@
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.ControlLight;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panel1.Controls.Add(this.btnConfigure);
+            this.panel1.Controls.Add(this.btnConfigureMaster);
             this.panel1.Controls.Add(this.groupBox5);
             this.panel1.Controls.Add(this.groupBox3);
             this.panel1.Controls.Add(this.groupBox4);
@@ -130,20 +152,20 @@
             this.panel1.Size = new System.Drawing.Size(316, 243);
             this.panel1.TabIndex = 0;
             // 
-            // btnConfigure
+            // btnConfigureMaster
             // 
-            this.btnConfigure.Location = new System.Drawing.Point(115, 205);
-            this.btnConfigure.Name = "btnConfigure";
-            this.btnConfigure.Size = new System.Drawing.Size(75, 23);
-            this.btnConfigure.TabIndex = 13;
-            this.btnConfigure.Text = "Konfiguruj";
-            this.btnConfigure.UseVisualStyleBackColor = true;
+            this.btnConfigureMaster.Location = new System.Drawing.Point(115, 205);
+            this.btnConfigureMaster.Name = "btnConfigureMaster";
+            this.btnConfigureMaster.Size = new System.Drawing.Size(75, 23);
+            this.btnConfigureMaster.TabIndex = 13;
+            this.btnConfigureMaster.Text = "Konfiguruj";
+            this.btnConfigureMaster.UseVisualStyleBackColor = true;
             // 
             // groupBox5
             // 
             this.groupBox5.Controls.Add(this.label7);
             this.groupBox5.Controls.Add(this.label8);
-            this.groupBox5.Controls.Add(this.nudTimeConstraint);
+            this.groupBox5.Controls.Add(this.nudTimeConstraintMaster);
             this.groupBox5.Controls.Add(this.label6);
             this.groupBox5.Controls.Add(this.nudRetransmissions);
             this.groupBox5.Controls.Add(this.label5);
@@ -174,22 +196,22 @@
             this.label8.TabIndex = 11;
             this.label8.Text = "Odstęp";
             // 
-            // nudTimeConstraint
+            // nudTimeConstraintMaster
             // 
-            this.nudTimeConstraint.Increment = new decimal(new int[] {
+            this.nudTimeConstraintMaster.Increment = new decimal(new int[] {
             10,
             0,
             0,
             0});
-            this.nudTimeConstraint.Location = new System.Drawing.Point(98, 84);
-            this.nudTimeConstraint.Maximum = new decimal(new int[] {
+            this.nudTimeConstraintMaster.Location = new System.Drawing.Point(98, 84);
+            this.nudTimeConstraintMaster.Maximum = new decimal(new int[] {
             1000,
             0,
             0,
             0});
-            this.nudTimeConstraint.Name = "nudTimeConstraint";
-            this.nudTimeConstraint.Size = new System.Drawing.Size(120, 20);
-            this.nudTimeConstraint.TabIndex = 10;
+            this.nudTimeConstraintMaster.Name = "nudTimeConstraintMaster";
+            this.nudTimeConstraintMaster.Size = new System.Drawing.Size(120, 20);
+            this.nudTimeConstraintMaster.TabIndex = 10;
             // 
             // label6
             // 
@@ -282,7 +304,7 @@
             // 
             // groupBox4
             // 
-            this.groupBox4.Controls.Add(this.cbCommands);
+            this.groupBox4.Controls.Add(this.cbCommandMaster);
             this.groupBox4.Controls.Add(this.cbAddress);
             this.groupBox4.Controls.Add(this.label2);
             this.groupBox4.Controls.Add(this.label1);
@@ -293,13 +315,13 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Definicja ramki";
             // 
-            // cbCommands
+            // cbCommandMaster
             // 
-            this.cbCommands.FormattingEnabled = true;
-            this.cbCommands.Location = new System.Drawing.Point(69, 47);
-            this.cbCommands.Name = "cbCommands";
-            this.cbCommands.Size = new System.Drawing.Size(102, 21);
-            this.cbCommands.TabIndex = 4;
+            this.cbCommandMaster.FormattingEnabled = true;
+            this.cbCommandMaster.Location = new System.Drawing.Point(69, 47);
+            this.cbCommandMaster.Name = "cbCommandMaster";
+            this.cbCommandMaster.Size = new System.Drawing.Size(102, 21);
+            this.cbCommandMaster.TabIndex = 4;
             // 
             // cbAddress
             // 
@@ -329,6 +351,12 @@
             // 
             // gbSlave
             // 
+            this.gbSlave.Controls.Add(this.panel2);
+            this.gbSlave.Controls.Add(this.btnSendSlave);
+            this.gbSlave.Controls.Add(this.tbTransmitedDataSlave);
+            this.gbSlave.Controls.Add(this.label11);
+            this.gbSlave.Controls.Add(this.tbRecievedDataSlave);
+            this.gbSlave.Controls.Add(this.label10);
             this.gbSlave.Enabled = false;
             this.gbSlave.Location = new System.Drawing.Point(453, 12);
             this.gbSlave.Name = "gbSlave";
@@ -347,32 +375,32 @@
             this.label9.TabIndex = 5;
             this.label9.Text = "Nadawanie: ";
             // 
-            // tbTransmitedData
+            // tbTransmitedDataMaster
             // 
-            this.tbTransmitedData.Location = new System.Drawing.Point(6, 288);
-            this.tbTransmitedData.Margin = new System.Windows.Forms.Padding(2);
-            this.tbTransmitedData.Multiline = true;
-            this.tbTransmitedData.Name = "tbTransmitedData";
-            this.tbTransmitedData.Size = new System.Drawing.Size(113, 86);
-            this.tbTransmitedData.TabIndex = 4;
+            this.tbTransmitedDataMaster.Location = new System.Drawing.Point(6, 288);
+            this.tbTransmitedDataMaster.Margin = new System.Windows.Forms.Padding(2);
+            this.tbTransmitedDataMaster.Multiline = true;
+            this.tbTransmitedDataMaster.Name = "tbTransmitedDataMaster";
+            this.tbTransmitedDataMaster.Size = new System.Drawing.Size(113, 86);
+            this.tbTransmitedDataMaster.TabIndex = 4;
             // 
-            // btnSend
+            // btnSendMaster
             // 
-            this.btnSend.Location = new System.Drawing.Point(6, 379);
-            this.btnSend.Name = "btnSend";
-            this.btnSend.Size = new System.Drawing.Size(75, 23);
-            this.btnSend.TabIndex = 14;
-            this.btnSend.Text = "Wyślij";
-            this.btnSend.UseVisualStyleBackColor = true;
+            this.btnSendMaster.Location = new System.Drawing.Point(6, 379);
+            this.btnSendMaster.Name = "btnSendMaster";
+            this.btnSendMaster.Size = new System.Drawing.Size(75, 23);
+            this.btnSendMaster.TabIndex = 14;
+            this.btnSendMaster.Text = "Wyślij";
+            this.btnSendMaster.UseVisualStyleBackColor = true;
             // 
-            // tbRecievedData
+            // tbRecievedDataMaster
             // 
-            this.tbRecievedData.Location = new System.Drawing.Point(134, 288);
-            this.tbRecievedData.Margin = new System.Windows.Forms.Padding(2);
-            this.tbRecievedData.Multiline = true;
-            this.tbRecievedData.Name = "tbRecievedData";
-            this.tbRecievedData.Size = new System.Drawing.Size(113, 86);
-            this.tbRecievedData.TabIndex = 15;
+            this.tbRecievedDataMaster.Location = new System.Drawing.Point(134, 288);
+            this.tbRecievedDataMaster.Margin = new System.Windows.Forms.Padding(2);
+            this.tbRecievedDataMaster.Multiline = true;
+            this.tbRecievedDataMaster.Name = "tbRecievedDataMaster";
+            this.tbRecievedDataMaster.Size = new System.Drawing.Size(113, 86);
+            this.tbRecievedDataMaster.TabIndex = 15;
             // 
             // label3
             // 
@@ -383,6 +411,182 @@
             this.label3.Size = new System.Drawing.Size(58, 13);
             this.label3.TabIndex = 16;
             this.label3.Text = "Odbieranie";
+            // 
+            // tbRecievedDataSlave
+            // 
+            this.tbRecievedDataSlave.Location = new System.Drawing.Point(163, 297);
+            this.tbRecievedDataSlave.Margin = new System.Windows.Forms.Padding(2);
+            this.tbRecievedDataSlave.Multiline = true;
+            this.tbRecievedDataSlave.Name = "tbRecievedDataSlave";
+            this.tbRecievedDataSlave.Size = new System.Drawing.Size(113, 86);
+            this.tbRecievedDataSlave.TabIndex = 17;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(160, 279);
+            this.label10.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(58, 13);
+            this.label10.TabIndex = 18;
+            this.label10.Text = "Odbieranie";
+            // 
+            // btnSendSlave
+            // 
+            this.btnSendSlave.Location = new System.Drawing.Point(24, 388);
+            this.btnSendSlave.Name = "btnSendSlave";
+            this.btnSendSlave.Size = new System.Drawing.Size(75, 23);
+            this.btnSendSlave.TabIndex = 21;
+            this.btnSendSlave.Text = "Wyślij";
+            this.btnSendSlave.UseVisualStyleBackColor = true;
+            // 
+            // tbTransmitedDataSlave
+            // 
+            this.tbTransmitedDataSlave.Location = new System.Drawing.Point(24, 297);
+            this.tbTransmitedDataSlave.Margin = new System.Windows.Forms.Padding(2);
+            this.tbTransmitedDataSlave.Multiline = true;
+            this.tbTransmitedDataSlave.Name = "tbTransmitedDataSlave";
+            this.tbTransmitedDataSlave.Size = new System.Drawing.Size(113, 86);
+            this.tbTransmitedDataSlave.TabIndex = 19;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(21, 279);
+            this.label11.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(67, 13);
+            this.label11.TabIndex = 20;
+            this.label11.Text = "Nadawanie: ";
+            // 
+            // btnConfigureSlave
+            // 
+            this.btnConfigureSlave.Location = new System.Drawing.Point(117, 173);
+            this.btnConfigureSlave.Name = "btnConfigureSlave";
+            this.btnConfigureSlave.Size = new System.Drawing.Size(75, 23);
+            this.btnConfigureSlave.TabIndex = 13;
+            this.btnConfigureSlave.Text = "Konfiguruj";
+            this.btnConfigureSlave.UseVisualStyleBackColor = true;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.label12);
+            this.groupBox2.Controls.Add(this.nudAdddress);
+            this.groupBox2.Controls.Add(this.label13);
+            this.groupBox2.Controls.Add(this.nudTimeConstraintSlave);
+            this.groupBox2.Controls.Add(this.label18);
+            this.groupBox2.Location = new System.Drawing.Point(7, 84);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(297, 83);
+            this.groupBox2.TabIndex = 4;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Parametry";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(200, 47);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(20, 13);
+            this.label12.TabIndex = 12;
+            this.label12.Text = "ms";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(14, 51);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(41, 13);
+            this.label13.TabIndex = 11;
+            this.label13.Text = "Odstęp";
+            // 
+            // nudTimeConstraintSlave
+            // 
+            this.nudTimeConstraintSlave.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.nudTimeConstraintSlave.Location = new System.Drawing.Point(74, 45);
+            this.nudTimeConstraintSlave.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.nudTimeConstraintSlave.Name = "nudTimeConstraintSlave";
+            this.nudTimeConstraintSlave.Size = new System.Drawing.Size(120, 20);
+            this.nudTimeConstraintSlave.TabIndex = 10;
+            // 
+            // groupBox7
+            // 
+            this.groupBox7.Controls.Add(this.cbCommandSlave);
+            this.groupBox7.Controls.Add(this.label17);
+            this.groupBox7.Location = new System.Drawing.Point(124, 3);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(180, 63);
+            this.groupBox7.TabIndex = 4;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "Definicja ramki";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(10, 26);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(37, 13);
+            this.label18.TabIndex = 0;
+            this.label18.Text = "Adres:";
+            // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel2.Controls.Add(this.btnConfigureSlave);
+            this.panel2.Controls.Add(this.groupBox2);
+            this.panel2.Controls.Add(this.groupBox7);
+            this.panel2.Location = new System.Drawing.Point(24, 24);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(316, 209);
+            this.panel2.TabIndex = 22;
+            // 
+            // nudAdddress
+            // 
+            this.nudAdddress.Location = new System.Drawing.Point(74, 19);
+            this.nudAdddress.Maximum = new decimal(new int[] {
+            247,
+            0,
+            0,
+            0});
+            this.nudAdddress.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudAdddress.Name = "nudAdddress";
+            this.nudAdddress.Size = new System.Drawing.Size(101, 20);
+            this.nudAdddress.TabIndex = 5;
+            this.nudAdddress.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // cbCommandSlave
+            // 
+            this.cbCommandSlave.FormattingEnabled = true;
+            this.cbCommandSlave.Location = new System.Drawing.Point(72, 24);
+            this.cbCommandSlave.Name = "cbCommandSlave";
+            this.cbCommandSlave.Size = new System.Drawing.Size(102, 21);
+            this.cbCommandSlave.TabIndex = 14;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(6, 27);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(43, 13);
+            this.label17.TabIndex = 13;
+            this.label17.Text = "Rozkaz";
             // 
             // IwSK2
             // 
@@ -401,13 +605,22 @@
             this.panel1.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudTimeConstraint)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudTimeConstraintMaster)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudRetransmissions)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTimeout)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
+            this.gbSlave.ResumeLayout(false);
+            this.gbSlave.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudTimeConstraintSlave)).EndInit();
+            this.groupBox7.ResumeLayout(false);
+            this.groupBox7.PerformLayout();
+            this.panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.nudAdddress)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -426,7 +639,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox cbAddress;
-        private System.Windows.Forms.ComboBox cbCommands;
+        private System.Windows.Forms.ComboBox cbCommandMaster;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.NumericUpDown nudTimeout;
         private System.Windows.Forms.Label label4;
@@ -435,14 +648,30 @@
         private System.Windows.Forms.NumericUpDown nudRetransmissions;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.NumericUpDown nudTimeConstraint;
+        private System.Windows.Forms.NumericUpDown nudTimeConstraintMaster;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button btnConfigure;
-        private System.Windows.Forms.Button btnSend;
-        private System.Windows.Forms.TextBox tbTransmitedData;
+        private System.Windows.Forms.Button btnConfigureMaster;
+        private System.Windows.Forms.Button btnSendMaster;
+        private System.Windows.Forms.TextBox tbTransmitedDataMaster;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.TextBox tbRecievedData;
+        private System.Windows.Forms.TextBox tbRecievedDataMaster;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Button btnConfigureSlave;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.NumericUpDown nudTimeConstraintSlave;
+        private System.Windows.Forms.GroupBox groupBox7;
+        private System.Windows.Forms.NumericUpDown nudAdddress;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Button btnSendSlave;
+        private System.Windows.Forms.TextBox tbTransmitedDataSlave;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.TextBox tbRecievedDataSlave;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.ComboBox cbCommandSlave;
+        private System.Windows.Forms.Label label17;
     }
 }
 
