@@ -33,7 +33,7 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.gbMaster = new System.Windows.Forms.GroupBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnConfigure = new System.Windows.Forms.Button();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
@@ -53,9 +53,9 @@
             this.label1 = new System.Windows.Forms.Label();
             this.gbSlave = new System.Windows.Forms.GroupBox();
             this.label9 = new System.Windows.Forms.Label();
-            this.transmitedDataTextBox = new System.Windows.Forms.TextBox();
-            this.button2 = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.tbTransmitedData = new System.Windows.Forms.TextBox();
+            this.btnSend = new System.Windows.Forms.Button();
+            this.tbRecievedData = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.gbMaster.SuspendLayout();
@@ -104,10 +104,10 @@
             // 
             // gbMaster
             // 
-            this.gbMaster.Controls.Add(this.textBox1);
+            this.gbMaster.Controls.Add(this.tbRecievedData);
             this.gbMaster.Controls.Add(this.label3);
-            this.gbMaster.Controls.Add(this.button2);
-            this.gbMaster.Controls.Add(this.transmitedDataTextBox);
+            this.gbMaster.Controls.Add(this.btnSend);
+            this.gbMaster.Controls.Add(this.tbTransmitedData);
             this.gbMaster.Controls.Add(this.label9);
             this.gbMaster.Controls.Add(this.panel1);
             this.gbMaster.Location = new System.Drawing.Point(12, 12);
@@ -121,7 +121,7 @@
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.ControlLight;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panel1.Controls.Add(this.button1);
+            this.panel1.Controls.Add(this.btnConfigure);
             this.panel1.Controls.Add(this.groupBox5);
             this.panel1.Controls.Add(this.groupBox3);
             this.panel1.Controls.Add(this.groupBox4);
@@ -130,14 +130,14 @@
             this.panel1.Size = new System.Drawing.Size(316, 243);
             this.panel1.TabIndex = 0;
             // 
-            // button1
+            // btnConfigure
             // 
-            this.button1.Location = new System.Drawing.Point(115, 205);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 13;
-            this.button1.Text = "Konfiguruj";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnConfigure.Location = new System.Drawing.Point(115, 205);
+            this.btnConfigure.Name = "btnConfigure";
+            this.btnConfigure.Size = new System.Drawing.Size(75, 23);
+            this.btnConfigure.TabIndex = 13;
+            this.btnConfigure.Text = "Konfiguruj";
+            this.btnConfigure.UseVisualStyleBackColor = true;
             // 
             // groupBox5
             // 
@@ -347,32 +347,32 @@
             this.label9.TabIndex = 5;
             this.label9.Text = "Nadawanie: ";
             // 
-            // transmitedDataTextBox
+            // tbTransmitedData
             // 
-            this.transmitedDataTextBox.Location = new System.Drawing.Point(6, 288);
-            this.transmitedDataTextBox.Margin = new System.Windows.Forms.Padding(2);
-            this.transmitedDataTextBox.Multiline = true;
-            this.transmitedDataTextBox.Name = "transmitedDataTextBox";
-            this.transmitedDataTextBox.Size = new System.Drawing.Size(113, 86);
-            this.transmitedDataTextBox.TabIndex = 4;
+            this.tbTransmitedData.Location = new System.Drawing.Point(6, 288);
+            this.tbTransmitedData.Margin = new System.Windows.Forms.Padding(2);
+            this.tbTransmitedData.Multiline = true;
+            this.tbTransmitedData.Name = "tbTransmitedData";
+            this.tbTransmitedData.Size = new System.Drawing.Size(113, 86);
+            this.tbTransmitedData.TabIndex = 4;
             // 
-            // button2
+            // btnSend
             // 
-            this.button2.Location = new System.Drawing.Point(6, 379);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 14;
-            this.button2.Text = "Wyślij";
-            this.button2.UseVisualStyleBackColor = true;
+            this.btnSend.Location = new System.Drawing.Point(6, 379);
+            this.btnSend.Name = "btnSend";
+            this.btnSend.Size = new System.Drawing.Size(75, 23);
+            this.btnSend.TabIndex = 14;
+            this.btnSend.Text = "Wyślij";
+            this.btnSend.UseVisualStyleBackColor = true;
             // 
-            // textBox1
+            // tbRecievedData
             // 
-            this.textBox1.Location = new System.Drawing.Point(134, 288);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(2);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(113, 86);
-            this.textBox1.TabIndex = 15;
+            this.tbRecievedData.Location = new System.Drawing.Point(134, 288);
+            this.tbRecievedData.Margin = new System.Windows.Forms.Padding(2);
+            this.tbRecievedData.Multiline = true;
+            this.tbRecievedData.Name = "tbRecievedData";
+            this.tbRecievedData.Size = new System.Drawing.Size(113, 86);
+            this.tbRecievedData.TabIndex = 15;
             // 
             // label3
             // 
@@ -437,11 +437,11 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.NumericUpDown nudTimeConstraint;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.TextBox transmitedDataTextBox;
+        private System.Windows.Forms.Button btnConfigure;
+        private System.Windows.Forms.Button btnSend;
+        private System.Windows.Forms.TextBox tbTransmitedData;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox tbRecievedData;
         private System.Windows.Forms.Label label3;
     }
 }
