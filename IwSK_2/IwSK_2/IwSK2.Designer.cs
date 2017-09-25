@@ -35,7 +35,7 @@
             this.tbRecievedDataMaster = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.btnSendMaster = new System.Windows.Forms.Button();
-            this.tbTransmitedDataMaster = new System.Windows.Forms.TextBox();
+            this.tbTransmittedDataMaster = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnConfigureMaster = new System.Windows.Forms.Button();
@@ -69,10 +69,14 @@
             this.cbCommandSlave = new System.Windows.Forms.ComboBox();
             this.label17 = new System.Windows.Forms.Label();
             this.btnSendSlave = new System.Windows.Forms.Button();
-            this.tbTransmitedDataSlave = new System.Windows.Forms.TextBox();
+            this.tbTransmittedDataSlave = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.tbRecievedDataSlave = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
+            this.cbHexTransmittedMaster = new System.Windows.Forms.CheckBox();
+            this.cbHexRecievedMaster = new System.Windows.Forms.CheckBox();
+            this.cbHexTransmittedSlave = new System.Windows.Forms.CheckBox();
+            this.cbHexRecievedSlave = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.gbMaster.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -126,10 +130,12 @@
             // 
             // gbMaster
             // 
+            this.gbMaster.Controls.Add(this.cbHexRecievedMaster);
+            this.gbMaster.Controls.Add(this.cbHexTransmittedMaster);
             this.gbMaster.Controls.Add(this.tbRecievedDataMaster);
             this.gbMaster.Controls.Add(this.label3);
             this.gbMaster.Controls.Add(this.btnSendMaster);
-            this.gbMaster.Controls.Add(this.tbTransmitedDataMaster);
+            this.gbMaster.Controls.Add(this.tbTransmittedDataMaster);
             this.gbMaster.Controls.Add(this.label9);
             this.gbMaster.Controls.Add(this.panel1);
             this.gbMaster.Location = new System.Drawing.Point(12, 12);
@@ -168,14 +174,14 @@
             this.btnSendMaster.UseVisualStyleBackColor = true;
             this.btnSendMaster.Click += new System.EventHandler(this.btnSendMaster_Click);
             // 
-            // tbTransmitedDataMaster
+            // tbTransmittedDataMaster
             // 
-            this.tbTransmitedDataMaster.Location = new System.Drawing.Point(6, 288);
-            this.tbTransmitedDataMaster.Margin = new System.Windows.Forms.Padding(2);
-            this.tbTransmitedDataMaster.Multiline = true;
-            this.tbTransmitedDataMaster.Name = "tbTransmitedDataMaster";
-            this.tbTransmitedDataMaster.Size = new System.Drawing.Size(113, 86);
-            this.tbTransmitedDataMaster.TabIndex = 4;
+            this.tbTransmittedDataMaster.Location = new System.Drawing.Point(6, 288);
+            this.tbTransmittedDataMaster.Margin = new System.Windows.Forms.Padding(2);
+            this.tbTransmittedDataMaster.Multiline = true;
+            this.tbTransmittedDataMaster.Name = "tbTransmittedDataMaster";
+            this.tbTransmittedDataMaster.Size = new System.Drawing.Size(113, 86);
+            this.tbTransmittedDataMaster.TabIndex = 4;
             // 
             // label9
             // 
@@ -400,9 +406,11 @@
             // 
             // gbSlave
             // 
+            this.gbSlave.Controls.Add(this.cbHexRecievedSlave);
+            this.gbSlave.Controls.Add(this.cbHexTransmittedSlave);
             this.gbSlave.Controls.Add(this.panel2);
             this.gbSlave.Controls.Add(this.btnSendSlave);
-            this.gbSlave.Controls.Add(this.tbTransmitedDataSlave);
+            this.gbSlave.Controls.Add(this.tbTransmittedDataSlave);
             this.gbSlave.Controls.Add(this.label11);
             this.gbSlave.Controls.Add(this.tbRecievedDataSlave);
             this.gbSlave.Controls.Add(this.label10);
@@ -554,14 +562,14 @@
             this.btnSendSlave.UseVisualStyleBackColor = true;
             this.btnSendSlave.Click += new System.EventHandler(this.btnSendSlave_Click);
             // 
-            // tbTransmitedDataSlave
+            // tbTransmittedDataSlave
             // 
-            this.tbTransmitedDataSlave.Location = new System.Drawing.Point(24, 297);
-            this.tbTransmitedDataSlave.Margin = new System.Windows.Forms.Padding(2);
-            this.tbTransmitedDataSlave.Multiline = true;
-            this.tbTransmitedDataSlave.Name = "tbTransmitedDataSlave";
-            this.tbTransmitedDataSlave.Size = new System.Drawing.Size(113, 86);
-            this.tbTransmitedDataSlave.TabIndex = 19;
+            this.tbTransmittedDataSlave.Location = new System.Drawing.Point(24, 297);
+            this.tbTransmittedDataSlave.Margin = new System.Windows.Forms.Padding(2);
+            this.tbTransmittedDataSlave.Multiline = true;
+            this.tbTransmittedDataSlave.Name = "tbTransmittedDataSlave";
+            this.tbTransmittedDataSlave.Size = new System.Drawing.Size(113, 86);
+            this.tbTransmittedDataSlave.TabIndex = 19;
             // 
             // label11
             // 
@@ -591,6 +599,46 @@
             this.label10.Size = new System.Drawing.Size(58, 13);
             this.label10.TabIndex = 18;
             this.label10.Text = "Odbieranie";
+            // 
+            // cbHexTransmittedMaster
+            // 
+            this.cbHexTransmittedMaster.AutoSize = true;
+            this.cbHexTransmittedMaster.Location = new System.Drawing.Point(76, 266);
+            this.cbHexTransmittedMaster.Name = "cbHexTransmittedMaster";
+            this.cbHexTransmittedMaster.Size = new System.Drawing.Size(43, 17);
+            this.cbHexTransmittedMaster.TabIndex = 5;
+            this.cbHexTransmittedMaster.Text = "hex";
+            this.cbHexTransmittedMaster.UseVisualStyleBackColor = true;
+            // 
+            // cbHexRecievedMaster
+            // 
+            this.cbHexRecievedMaster.AutoSize = true;
+            this.cbHexRecievedMaster.Location = new System.Drawing.Point(204, 266);
+            this.cbHexRecievedMaster.Name = "cbHexRecievedMaster";
+            this.cbHexRecievedMaster.Size = new System.Drawing.Size(43, 17);
+            this.cbHexRecievedMaster.TabIndex = 17;
+            this.cbHexRecievedMaster.Text = "hex";
+            this.cbHexRecievedMaster.UseVisualStyleBackColor = true;
+            // 
+            // cbHexTransmittedSlave
+            // 
+            this.cbHexTransmittedSlave.AutoSize = true;
+            this.cbHexTransmittedSlave.Location = new System.Drawing.Point(94, 275);
+            this.cbHexTransmittedSlave.Name = "cbHexTransmittedSlave";
+            this.cbHexTransmittedSlave.Size = new System.Drawing.Size(43, 17);
+            this.cbHexTransmittedSlave.TabIndex = 18;
+            this.cbHexTransmittedSlave.Text = "hex";
+            this.cbHexTransmittedSlave.UseVisualStyleBackColor = true;
+            // 
+            // cbHexRecievedSlave
+            // 
+            this.cbHexRecievedSlave.AutoSize = true;
+            this.cbHexRecievedSlave.Location = new System.Drawing.Point(233, 275);
+            this.cbHexRecievedSlave.Name = "cbHexRecievedSlave";
+            this.cbHexRecievedSlave.Size = new System.Drawing.Size(43, 17);
+            this.cbHexRecievedSlave.TabIndex = 23;
+            this.cbHexRecievedSlave.Text = "hex";
+            this.cbHexRecievedSlave.UseVisualStyleBackColor = true;
             // 
             // IwSK2
             // 
@@ -656,7 +704,7 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button btnConfigureMaster;
         private System.Windows.Forms.Button btnSendMaster;
-        private System.Windows.Forms.TextBox tbTransmitedDataMaster;
+        private System.Windows.Forms.TextBox tbTransmittedDataMaster;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox tbRecievedDataMaster;
         private System.Windows.Forms.Label label3;
@@ -670,12 +718,16 @@
         private System.Windows.Forms.NumericUpDown nudAdddress;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Button btnSendSlave;
-        private System.Windows.Forms.TextBox tbTransmitedDataSlave;
+        private System.Windows.Forms.TextBox tbTransmittedDataSlave;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TextBox tbRecievedDataSlave;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.ComboBox cbCommandSlave;
         private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.CheckBox cbHexTransmittedMaster;
+        private System.Windows.Forms.CheckBox cbHexRecievedMaster;
+        private System.Windows.Forms.CheckBox cbHexRecievedSlave;
+        private System.Windows.Forms.CheckBox cbHexTransmittedSlave;
     }
 }
 
