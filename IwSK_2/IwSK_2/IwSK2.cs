@@ -39,6 +39,25 @@ namespace IwSK_2
             Master,
             Slave
         }
-        
+
+        private void btnConfigureMaster_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnSendMaster_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnConfigureSlave_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnSendSlave_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
