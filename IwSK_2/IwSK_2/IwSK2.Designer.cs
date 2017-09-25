@@ -179,6 +179,7 @@
             this.tbTransmittedDataMaster.Name = "tbTransmittedDataMaster";
             this.tbTransmittedDataMaster.Size = new System.Drawing.Size(113, 39);
             this.tbTransmittedDataMaster.TabIndex = 4;
+            this.tbTransmittedDataMaster.TextChanged += new System.EventHandler(this.tbTransmittedDataMaster_TextChanged);
             // 
             // label9
             // 
@@ -627,6 +628,7 @@
             this.tbRecievedDataMaster.Margin = new System.Windows.Forms.Padding(2);
             this.tbRecievedDataMaster.Multiline = true;
             this.tbRecievedDataMaster.Name = "tbRecievedDataMaster";
+            this.tbRecievedDataMaster.ReadOnly = true;
             this.tbRecievedDataMaster.Size = new System.Drawing.Size(113, 39);
             this.tbRecievedDataMaster.TabIndex = 19;
             // 
@@ -685,6 +687,7 @@
             this.tbRecievedDataSlave.Margin = new System.Windows.Forms.Padding(2);
             this.tbRecievedDataSlave.Multiline = true;
             this.tbRecievedDataSlave.Name = "tbRecievedDataSlave";
+            this.tbRecievedDataSlave.ReadOnly = true;
             this.tbRecievedDataSlave.Size = new System.Drawing.Size(113, 39);
             this.tbRecievedDataSlave.TabIndex = 23;
             // 

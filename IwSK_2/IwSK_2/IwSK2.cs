@@ -60,15 +60,10 @@ namespace IwSK_2
 
         }
 
-        private void cbHexTransmittedMaster_CheckedChanged(object sender, EventArgs e)
+        private void tbTransmittedDataMaster_TextChanged(object sender, EventArgs e)
         {
-            if (cbHexTransmittedMaster.Checked)
-            {
-                byte[] ba = Encoding.Default.GetBytes(tbTransmittedDataMaster.Text);
+            byte[] ba = Encoding.Default.GetBytes(tbTransmittedDataMaster.Text);
 
-            }
         }
-
-        
     }
 }
