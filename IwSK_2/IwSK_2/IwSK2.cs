@@ -59,5 +59,16 @@ namespace IwSK_2
         {
 
         }
+
+        private void cbHexTransmittedMaster_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbHexTransmittedMaster.Checked)
+            {
+                byte[] ba = Encoding.Default.GetBytes(tbTransmittedDataMaster.Text);
+
+            }
+        }
+
+        
     }
 }
