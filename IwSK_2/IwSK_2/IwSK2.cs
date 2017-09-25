@@ -62,8 +62,28 @@ namespace IwSK_2
 
         private void tbTransmittedDataMaster_TextChanged(object sender, EventArgs e)
         {
-            byte[] ba = Encoding.Default.GetBytes(tbTransmittedDataMaster.Text);
+            tbTransmittedDataMasterHex.Text = ConvertStringToHex(tbTransmittedDataMaster.Text);
+        }
+        
+        private void tbRecievedDataMaster_TextChanged(object sender, EventArgs e)
+        {
+            tbRecievedDataMasterHex.Text = ConvertStringToHex(tbRecievedDataMaster.Text);
+        }
 
+        private void tbTransmittedDataSlave_TextChanged(object sender, EventArgs e)
+        {
+            tbTransmittedDataSlaveHex.Text = ConvertStringToHex(tbTransmittedDataSlave.Text);
+        }
+
+        private void tbRecievedDataSlave_TextChanged(object sender, EventArgs e)
+        {
+            tbRecievedDataSlaveHex.Text = ConvertStringToHex(tbRecievedDataSlave.Text);
+        }
+
+        private string ConvertStringToHex(string text)
+        {
+            byte[] ba = Encoding.Default.GetBytes(text);
+            return BitConverter.ToString(ba).Replace("-", " ");
         }
     }
 }

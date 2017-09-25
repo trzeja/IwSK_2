@@ -631,6 +631,7 @@
             this.tbRecievedDataMaster.ReadOnly = true;
             this.tbRecievedDataMaster.Size = new System.Drawing.Size(113, 39);
             this.tbRecievedDataMaster.TabIndex = 19;
+            this.tbRecievedDataMaster.TextChanged += new System.EventHandler(this.tbRecievedDataMaster_TextChanged);
             // 
             // label16
             // 
@@ -660,6 +661,7 @@
             this.tbTransmittedDataSlave.Name = "tbTransmittedDataSlave";
             this.tbTransmittedDataSlave.Size = new System.Drawing.Size(113, 39);
             this.tbTransmittedDataSlave.TabIndex = 19;
+            this.tbTransmittedDataSlave.TextChanged += new System.EventHandler(this.tbTransmittedDataSlave_TextChanged);
             // 
             // label19
             // 
@@ -690,6 +692,7 @@
             this.tbRecievedDataSlave.ReadOnly = true;
             this.tbRecievedDataSlave.Size = new System.Drawing.Size(113, 39);
             this.tbRecievedDataSlave.TabIndex = 23;
+            this.tbRecievedDataSlave.TextChanged += new System.EventHandler(this.tbRecievedDataSlave_TextChanged);
             // 
             // IwSK2
             // 
