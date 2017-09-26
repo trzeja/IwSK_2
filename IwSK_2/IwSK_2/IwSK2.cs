@@ -12,10 +12,13 @@ namespace IwSK_2
 {
     public partial class IwSK2 : Form
     {
+        delegate void tbRecievedDataSlaveCallback(char character);
         private List<string> commands = new List<string>(new string[] { "1", "2" });
 
         private StationType stationType;
         private TransactionType transactionType;
+        private SerialPort port;
+        private List<char> receivedChars = new List<char>();
 
         public IwSK2()
         {
@@ -24,8 +27,10 @@ namespace IwSK_2
             transactionType = TransactionType.Broadcast;
             cbCommandMaster.DataSource = commands.Take(1).ToList(); // rozkaz 2 dostepny tylko w adresowanej 
             cbCommandMaster.SelectedIndex = -1;
-            cbPorts.DataSource = SerialPort.GetPortNames();
-            cbPorts.SelectedIndex = -1;
+            cbPortsMaster.DataSource = SerialPort.GetPortNames();
+            cbPortsMaster.SelectedIndex = -1;
+            cbPortsSlave.DataSource = SerialPort.GetPortNames();
+            cbPortsSlave.SelectedIndex = -1;
         }
 
         private void rbMaster_CheckedChanged(object sender, EventArgs e)
@@ -57,6 +62,26 @@ namespace IwSK_2
         private void btnConfigureMaster_Click(object sender, EventArgs e)
         {
             gbCommunicationMaster.Enabled = true;
+            if (port == null)
+            {
+                port = new SerialPort(cbPortsMaster.SelectedValue.ToString());
+                port.DataReceived += new SerialDataReceivedEventHandler(dataReceivedHandler);
+
+                port.Open();
+            }
+            else
+            {
+                if (port.PortName != cbPortsMaster.SelectedValue.ToString())
+                {
+                    if (port.IsOpen)
+                    {
+                        port.Close();
+                    }
+                    port = new SerialPort(cbPortsMaster.SelectedValue.ToString());
+                    port.DataReceived += new SerialDataReceivedEventHandler(dataReceivedHandler);
+                    port.Open();
+                }
+            }
         }
 
         private void btnSendMaster_Click(object sender, EventArgs e)
@@ -123,6 +148,7 @@ namespace IwSK_2
             dataChar.Add('\n');
             //tu mamy w charach ładnie wszystko, tylko na hex trzeba zmienić już do wyświetlania
             convertASCIIToHex(dataChar);
+            port.Write(dataChar.ToArray<char>(),0,dataChar.Count);
         }
 
         private void convertASCIIToHex(List<char> data)
@@ -154,8 +180,72 @@ namespace IwSK_2
 
         private void btnConfigureSlave_Click(object sender, EventArgs e)
         {
+            //konfiguracja reszty parametrow tu musi byc
             gbCommunicationSlave.Enabled = true;
+            if (port == null)
+            {
+                port = new SerialPort(cbPortsSlave.SelectedValue.ToString());
+                port.DataReceived += new SerialDataReceivedEventHandler(dataReceivedHandler);
+
+                port.Open();
+            }
+            else
+            {
+                if (port.PortName != cbPortsSlave.SelectedValue.ToString())
+                {
+                    if (port.IsOpen)
+                    {
+                        port.Close();
+                    }
+                    port = new SerialPort(cbPortsSlave.SelectedValue.ToString());
+                    port.DataReceived += new SerialDataReceivedEventHandler(dataReceivedHandler);
+                    port.Open();
+                }
+            }
         }  
+
+        private void setTbRecievedDataSlave(char character)
+        {
+            tbRecievedDataSlave.Text += character;
+        }
+
+        private void receivedDataTransformation(List<char> received)
+        {
+            //tbRecievedDataSlave.Text = received.ToString();
+
+        }
+
+        private void dataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
+        {
+            if (stationType == StationType.Slave) {
+                SerialPort senderPort = (SerialPort)sender;
+
+                for (int i = 0; i < senderPort.BytesToRead; i++)
+                {
+                    //TODO -> tu będzie 
+                    int intChar = senderPort.ReadChar();
+                    char rChar = Convert.ToChar(intChar);
+                    receivedChars.Add(rChar);
+                    //sprawdzac i \r i \n czy to starczy?
+                    if (rChar == '\n')
+                    {
+                        List<char> frame = new List<char>(receivedChars);
+                        receivedDataTransformation(frame);
+                        receivedChars.Clear();
+                        //TODO -> tu pewnie bedzie odsylanie wiadomosci
+                    }
+                    //if (tbRecievedDataSlave.InvokeRequired)
+                    //{
+                    //    tbRecievedDataSlaveCallback call = new tbRecievedDataSlaveCallback(setTbRecievedDataSlave);
+                    //    this.Invoke(call, Convert.ToChar(senderPort.ReadChar()));
+                    //}
+                    //else
+                    //{
+                    //    tbRecievedDataSlave.Text += Convert.ToChar(senderPort.ReadChar());
+                    //}
+                }
+            }
+        }
 
         private string ConvertStringToHex(string text)
         {
