@@ -56,7 +56,6 @@
             this.rbBroadcast = new System.Windows.Forms.RadioButton();
             this.rbAddressed = new System.Windows.Forms.RadioButton();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.tbAddress = new System.Windows.Forms.TextBox();
             this.cbCommandMaster = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -69,7 +68,7 @@
             this.btnConfigureSlave = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label12 = new System.Windows.Forms.Label();
-            this.nudAdddress = new System.Windows.Forms.NumericUpDown();
+            this.nudAdddressSlave = new System.Windows.Forms.NumericUpDown();
             this.label13 = new System.Windows.Forms.Label();
             this.nudTimeConstraintSlave = new System.Windows.Forms.NumericUpDown();
             this.label18 = new System.Windows.Forms.Label();
@@ -77,6 +76,7 @@
             this.tbTransmittedDataSlave = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
+            this.nudAddressMaster = new System.Windows.Forms.NumericUpDown();
             this.groupBox1.SuspendLayout();
             this.gbMaster.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -89,8 +89,9 @@
             this.gbSlave.SuspendLayout();
             this.panel2.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudAdddress)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAdddressSlave)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTimeConstraintSlave)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAddressMaster)).BeginInit();
             this.SuspendLayout();
             // 
             // rbMaster
@@ -404,7 +405,7 @@
             // 
             // groupBox4
             // 
-            this.groupBox4.Controls.Add(this.tbAddress);
+            this.groupBox4.Controls.Add(this.nudAddressMaster);
             this.groupBox4.Controls.Add(this.cbCommandMaster);
             this.groupBox4.Controls.Add(this.label2);
             this.groupBox4.Controls.Add(this.label1);
@@ -414,15 +415,6 @@
             this.groupBox4.TabIndex = 4;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Definicja ramki";
-            // 
-            // tbAddress
-            // 
-            this.tbAddress.Enabled = false;
-            this.tbAddress.Location = new System.Drawing.Point(69, 23);
-            this.tbAddress.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.tbAddress.Name = "tbAddress";
-            this.tbAddress.Size = new System.Drawing.Size(102, 20);
-            this.tbAddress.TabIndex = 5;
             // 
             // cbCommandMaster
             // 
@@ -534,7 +526,7 @@
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.label12);
-            this.groupBox2.Controls.Add(this.nudAdddress);
+            this.groupBox2.Controls.Add(this.nudAdddressSlave);
             this.groupBox2.Controls.Add(this.label13);
             this.groupBox2.Controls.Add(this.nudTimeConstraintSlave);
             this.groupBox2.Controls.Add(this.label18);
@@ -554,23 +546,23 @@
             this.label12.TabIndex = 12;
             this.label12.Text = "ms";
             // 
-            // nudAdddress
+            // nudAdddressSlave
             // 
-            this.nudAdddress.Location = new System.Drawing.Point(74, 19);
-            this.nudAdddress.Maximum = new decimal(new int[] {
+            this.nudAdddressSlave.Location = new System.Drawing.Point(74, 19);
+            this.nudAdddressSlave.Maximum = new decimal(new int[] {
             247,
             0,
             0,
             0});
-            this.nudAdddress.Minimum = new decimal(new int[] {
+            this.nudAdddressSlave.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.nudAdddress.Name = "nudAdddress";
-            this.nudAdddress.Size = new System.Drawing.Size(101, 20);
-            this.nudAdddress.TabIndex = 5;
-            this.nudAdddress.Value = new decimal(new int[] {
+            this.nudAdddressSlave.Name = "nudAdddressSlave";
+            this.nudAdddressSlave.Size = new System.Drawing.Size(101, 20);
+            this.nudAdddressSlave.TabIndex = 5;
+            this.nudAdddressSlave.Value = new decimal(new int[] {
             1,
             0,
             0,
@@ -651,6 +643,18 @@
             this.label10.TabIndex = 18;
             this.label10.Text = "Odbieranie";
             // 
+            // nudAddressMaster
+            // 
+            this.nudAddressMaster.Location = new System.Drawing.Point(69, 16);
+            this.nudAddressMaster.Maximum = new decimal(new int[] {
+            247,
+            0,
+            0,
+            0});
+            this.nudAddressMaster.Name = "nudAddressMaster";
+            this.nudAddressMaster.Size = new System.Drawing.Size(102, 20);
+            this.nudAddressMaster.TabIndex = 13;
+            // 
             // IwSK2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -680,8 +684,9 @@
             this.panel2.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudAdddress)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAdddressSlave)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTimeConstraintSlave)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAddressMaster)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -721,7 +726,7 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.NumericUpDown nudTimeConstraintSlave;
-        private System.Windows.Forms.NumericUpDown nudAdddress;
+        private System.Windows.Forms.NumericUpDown nudAdddressSlave;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label10;
@@ -736,7 +741,7 @@
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.TextBox tbTransmittedDataSlaveHex;
         private System.Windows.Forms.TextBox tbTransmittedDataSlave;
-        private System.Windows.Forms.TextBox tbAddress;
+        private System.Windows.Forms.NumericUpDown nudAddressMaster;
     }
 }
 
