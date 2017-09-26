@@ -14,10 +14,13 @@ namespace IwSK_2
         private List<string> commands = new List<string>(new string[] { "1", "2" });
 
         private StationType stationType;
+        private TransactionType transactionType;
+
         public IwSK2()
         {
             InitializeComponent();
             stationType = StationType.Master;
+            transactionType = TransactionType.Broadcast;
 
             cbCommandMaster.DataSource = commands;
             cbCommandMaster.SelectedIndex = -1;
@@ -33,15 +36,20 @@ namespace IwSK_2
             }
             else
             {
-                stationType = StationType.Slave;
-            }          
-            
+               stationType = StationType.Slave;
+            } 
         }
 
         private enum StationType
         {
             Master,
             Slave
+        }
+
+        private enum TransactionType
+        {
+            Addressed,
+            Broadcast
         }
 
         private void btnConfigureMaster_Click(object sender, EventArgs e)
@@ -90,12 +98,6 @@ namespace IwSK_2
 
         }
 
-        private void btnSendSlave_Click(object sender, EventArgs e)
-        {
-            
-
-        }
-
         private void tbTransmittedDataMaster_TextChanged(object sender, EventArgs e)
         {
             tbTransmittedDataMasterHex.Text = ConvertStringToHex(tbTransmittedDataMaster.Text);
@@ -120,6 +122,24 @@ namespace IwSK_2
         {
             byte[] ba = Encoding.Default.GetBytes(text);
             return BitConverter.ToString(ba).Replace("-", " ");
+        }
+
+        private void rbBroadcast_CheckedChanged(object sender, EventArgs e)
+        {
+            //gbMaster.Enabled = !gbMaster.Enabled;
+            //gbSlave.Enabled = !gbSlave.Enabled;
+
+            if (transactionType == TransactionType.Broadcast)
+            {
+                transactionType = TransactionType.Addressed;
+                tbAddress.Enabled = true;
+            }
+            else
+            {
+                transactionType = TransactionType.Broadcast;
+                tbAddress.Enabled = false;
+            }
+
         }
     }
 }

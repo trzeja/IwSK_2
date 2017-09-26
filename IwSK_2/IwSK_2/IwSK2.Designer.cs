@@ -390,6 +390,7 @@
             this.rbBroadcast.TabStop = true;
             this.rbBroadcast.Text = "Rozgłoszeniowa";
             this.rbBroadcast.UseVisualStyleBackColor = true;
+            this.rbBroadcast.CheckedChanged += new System.EventHandler(this.rbBroadcast_CheckedChanged);
             // 
             // rbAddressed
             // 
@@ -416,6 +417,7 @@
             // 
             // tbAddress
             // 
+            this.tbAddress.Enabled = false;
             this.tbAddress.Location = new System.Drawing.Point(69, 23);
             this.tbAddress.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tbAddress.Name = "tbAddress";
