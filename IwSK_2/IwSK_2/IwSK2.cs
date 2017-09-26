@@ -16,7 +16,7 @@ namespace IwSK_2
 
         private StationType stationType;
         private TransactionType transactionType;
-        private SerialPort port;
+
         public IwSK2()
         {
             InitializeComponent();
@@ -26,8 +26,6 @@ namespace IwSK_2
             cbCommandMaster.SelectedIndex = -1;
             cbPorts.DataSource = SerialPort.GetPortNames();
             cbPorts.SelectedIndex = -1;
-            cbPortsSlave.DataSource = SerialPort.GetPortNames();
-            cbPortsSlave.SelectedIndex = -1;
         }
 
         private void rbMaster_CheckedChanged(object sender, EventArgs e)
@@ -58,26 +56,7 @@ namespace IwSK_2
 
         private void btnConfigureMaster_Click(object sender, EventArgs e)
         {
-            if (port == null)
-            {
-                port = new SerialPort(cbPorts.SelectedValue.ToString());
-                port.DataReceived += new SerialDataReceivedEventHandler(dataReceivedHandler);
-                port.Open();
-               
-            }
-            else
-            {
-                if (!port.PortName.Equals(cbPorts.SelectedValue.ToString()))
-                {
-                    if (port.IsOpen)
-                    {
-                        port.Close();
-                    }
-                    port = new SerialPort(cbPorts.SelectedValue.ToString());
-                    port.DataReceived += new SerialDataReceivedEventHandler(dataReceivedHandler);
-                    port.Open();
-                }
-            }
+
         }
 
         private void btnSendMaster_Click(object sender, EventArgs e)
@@ -144,20 +123,6 @@ namespace IwSK_2
             dataChar.Add('\n');
             //tu mamy w charach ładnie wszystko, tylko na hex trzeba zmienić już do wyświetlania
             convertASCIIToHex(dataChar);
-            port.Write(dataChar.ToArray<char>(),0,dataChar.Count);
-        }
-
-        private void dataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
-        {
-            SerialPort senderPort = (SerialPort)sender;
-            if (stationType == StationType.Slave)
-            {
-                List<char> received = new List<char>();
-                for (int i = 0; i < (senderPort.BytesToRead); i++)
-                {
-                    received.Add(Convert.ToChar(senderPort.ReadChar()));
-                }
-            }
         }
 
         private void convertASCIIToHex(List<char> data)
@@ -189,25 +154,7 @@ namespace IwSK_2
 
         private void btnConfigureSlave_Click(object sender, EventArgs e)
         {
-            if (port == null)
-            {
-                port = new SerialPort(cbPortsSlave.SelectedValue.ToString());
-                port.DataReceived += new SerialDataReceivedEventHandler(dataReceivedHandler);
-                port.Open();
-            }
-            else
-            {
-                if (!port.PortName.Equals(cbPortsSlave.SelectedValue.ToString()))
-                {
-                    if (port.IsOpen)
-                    {
-                        port.Close();
-                    }
-                    port = new SerialPort(cbPortsSlave.SelectedValue.ToString());
-                    port.DataReceived += new SerialDataReceivedEventHandler(dataReceivedHandler);
-                    port.Open();
-                }
-            }
+
         }
 
         private void tbTransmittedDataMaster_TextChanged(object sender, EventArgs e)

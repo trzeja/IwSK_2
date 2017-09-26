@@ -81,8 +81,6 @@
             this.label17 = new System.Windows.Forms.Label();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.cbPorts = new System.Windows.Forms.ComboBox();
-            this.groupBox7 = new System.Windows.Forms.GroupBox();
-            this.cbPortsSlave = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.gbMaster.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -99,7 +97,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudAdddressSlave)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTimeConstraintSlave)).BeginInit();
             this.groupBox6.SuspendLayout();
-            this.groupBox7.SuspendLayout();
             this.SuspendLayout();
             // 
             // rbMaster
@@ -561,18 +558,17 @@
             // 
             this.panel2.BackColor = System.Drawing.SystemColors.ControlLight;
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panel2.Controls.Add(this.groupBox7);
             this.panel2.Controls.Add(this.btnConfigureSlave);
             this.panel2.Controls.Add(this.groupBox2);
             this.panel2.Location = new System.Drawing.Point(32, 30);
             this.panel2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(419, 215);
+            this.panel2.Size = new System.Drawing.Size(419, 159);
             this.panel2.TabIndex = 22;
             // 
             // btnConfigureSlave
             // 
-            this.btnConfigureSlave.Location = new System.Drawing.Point(167, 178);
+            this.btnConfigureSlave.Location = new System.Drawing.Point(156, 113);
             this.btnConfigureSlave.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnConfigureSlave.Name = "btnConfigureSlave";
             this.btnConfigureSlave.Size = new System.Drawing.Size(100, 28);
@@ -588,7 +584,7 @@
             this.groupBox2.Controls.Add(this.label13);
             this.groupBox2.Controls.Add(this.nudTimeConstraintSlave);
             this.groupBox2.Controls.Add(this.label18);
-            this.groupBox2.Location = new System.Drawing.Point(15, 69);
+            this.groupBox2.Location = new System.Drawing.Point(4, 4);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
@@ -744,24 +740,6 @@
             this.cbPorts.Size = new System.Drawing.Size(148, 24);
             this.cbPorts.TabIndex = 0;
             // 
-            // groupBox7
-            // 
-            this.groupBox7.Controls.Add(this.cbPortsSlave);
-            this.groupBox7.Location = new System.Drawing.Point(16, 12);
-            this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(396, 44);
-            this.groupBox7.TabIndex = 15;
-            this.groupBox7.TabStop = false;
-            this.groupBox7.Text = "Port COM:";
-            // 
-            // cbPortsSlave
-            // 
-            this.cbPortsSlave.FormattingEnabled = true;
-            this.cbPortsSlave.Location = new System.Drawing.Point(118, 14);
-            this.cbPortsSlave.Name = "cbPortsSlave";
-            this.cbPortsSlave.Size = new System.Drawing.Size(148, 24);
-            this.cbPortsSlave.TabIndex = 0;
-            // 
             // IwSK2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -796,7 +774,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudAdddressSlave)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTimeConstraintSlave)).EndInit();
             this.groupBox6.ResumeLayout(false);
-            this.groupBox7.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -856,8 +833,6 @@
         private System.Windows.Forms.TextBox tbHexSendFrame;
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.ComboBox cbPorts;
-        private System.Windows.Forms.GroupBox groupBox7;
-        private System.Windows.Forms.ComboBox cbPortsSlave;
     }
 }
 
