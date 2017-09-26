@@ -61,7 +61,7 @@ namespace IwSK_2
             List<char> dataChar = new List<char>();
             dataChar.Add(';');
             int sum = 0;
-            int dec = Int32.Parse(tbAddress.Text);
+            int dec = Int32.Parse(nudAddressMaster.Text);
             
             string address = dec.ToString("X");
             for (int i = 0;i<address.Length;i++)
@@ -128,14 +128,17 @@ namespace IwSK_2
             if (transactionType == TransactionType.Broadcast)
             {
                 transactionType = TransactionType.Addressed;
-                tbAddress.Enabled = true;
+                nudAddressMaster.Enabled = true;
                 cbCommandMaster.DataSource = commands; // w adresowanej dostepny 1 i 2 rozkaz
+                nudAddressMaster.Minimum = 1;
             }
             else
             {
                 transactionType = TransactionType.Broadcast;
-                tbAddress.Enabled = false;
+                nudAddressMaster.Enabled = false;
                 cbCommandMaster.DataSource = commands.Take(1).ToList(); // rozkaz 2 dostepny tylko w adresowanej 
+                nudAddressMaster.Minimum = 0;
+                nudAddressMaster.Value = 0;
             }
 
         }
