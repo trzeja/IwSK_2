@@ -58,6 +58,8 @@ namespace IwSK_2
         {
 
         }
+            gbCommunicationMaster.Enabled = true;
+        }
 
         private void btnSendMaster_Click(object sender, EventArgs e)
         {
@@ -87,10 +89,10 @@ namespace IwSK_2
             dataChar.Add(funHex.ElementAt(0));
 
             //dane hex
-            for (int i = 0; i < tbTransmittedDataMasterHex.Text.Length; i++)
+            for (int i = 0; i < ConvertStringToHex(tbTransmittedDataMaster.Text).Length; i++)
             {
-                if (tbTransmittedDataMasterHex.Text.ElementAt(i) != ' ') {
-                    dataChar.Add(tbTransmittedDataMasterHex.Text.ElementAt(i));
+                if (ConvertStringToHex(tbTransmittedDataMaster.Text).ElementAt(i) != ' ') {
+                    dataChar.Add(ConvertStringToHex(tbTransmittedDataMaster.Text).ElementAt(i));
                 }
             }
 
@@ -160,22 +162,8 @@ namespace IwSK_2
         private void tbTransmittedDataMaster_TextChanged(object sender, EventArgs e)
         {
             tbTransmittedDataMasterHex.Text = ConvertStringToHex(tbTransmittedDataMaster.Text);
-        }
-        
-        private void tbRecievedDataMaster_TextChanged(object sender, EventArgs e)
-        {
-            tbRecievedDataMasterHex.Text = ConvertStringToHex(tbRecievedDataMaster.Text);
-        }
-
-        private void tbTransmittedDataSlave_TextChanged(object sender, EventArgs e)
-        {
-            tbTransmittedDataSlaveHex.Text = ConvertStringToHex(tbTransmittedDataSlave.Text);
-        }
-
-        private void tbRecievedDataSlave_TextChanged(object sender, EventArgs e)
-        {
-            tbRecievedDataSlaveHex.Text = ConvertStringToHex(tbRecievedDataSlave.Text);
-        }
+            gbCommunicationSlave.Enabled = true;
+        }  
 
         private string ConvertStringToHex(string text)
         {
@@ -200,46 +188,6 @@ namespace IwSK_2
                 nudAddressMaster.Minimum = 0;
                 nudAddressMaster.Value = 0;
             }
-
-        }
-
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void label9_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label15_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void tbRecievedDataMasterHex_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void tbTransmittedDataMasterHex_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label14_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label17_Click(object sender, EventArgs e)
-        {
 
         }
     }
