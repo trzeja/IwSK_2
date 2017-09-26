@@ -21,8 +21,7 @@ namespace IwSK_2
             InitializeComponent();
             stationType = StationType.Master;
             transactionType = TransactionType.Broadcast;
-
-            cbCommandMaster.DataSource = commands;
+            cbCommandMaster.DataSource = commands.Take(1).ToList(); // rozkaz 2 dostepny tylko w adresowanej 
             cbCommandMaster.SelectedIndex = -1;
         }
 
@@ -126,18 +125,17 @@ namespace IwSK_2
 
         private void rbBroadcast_CheckedChanged(object sender, EventArgs e)
         {
-            //gbMaster.Enabled = !gbMaster.Enabled;
-            //gbSlave.Enabled = !gbSlave.Enabled;
-
             if (transactionType == TransactionType.Broadcast)
             {
                 transactionType = TransactionType.Addressed;
                 tbAddress.Enabled = true;
+                cbCommandMaster.DataSource = commands; // w adresowanej dostepny 1 i 2 rozkaz
             }
             else
             {
                 transactionType = TransactionType.Broadcast;
                 tbAddress.Enabled = false;
+                cbCommandMaster.DataSource = commands.Take(1).ToList(); // rozkaz 2 dostepny tylko w adresowanej 
             }
 
         }
