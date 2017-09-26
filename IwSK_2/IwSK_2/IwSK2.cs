@@ -11,12 +11,16 @@ namespace IwSK_2
 {
     public partial class IwSK2 : Form
     {
+        private List<string> commands = new List<string>(new string[] { "1", "2" });
 
         private StationType stationType;
         public IwSK2()
         {
             InitializeComponent();
             stationType = StationType.Master;
+
+            cbCommandMaster.DataSource = commands;
+            cbCommandMaster.SelectedIndex = -1;
         }
 
         private void rbMaster_CheckedChanged(object sender, EventArgs e)
