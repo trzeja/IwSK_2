@@ -60,22 +60,41 @@ namespace IwSK_2
         private void btnSendMaster_Click(object sender, EventArgs e)
         {
             List<char> dataChar = new List<char>();
-            dataChar.Add(';');
+            dataChar.Add(':');
             int sum = 0;
             int dec = Int32.Parse(tbAddress.Text);
             
+            //adres
             string address = dec.ToString("X");
-            for (int i = 0;i<address.Length;i++)
+            if (address.Length == 1)
             {
-                dataChar.Add(address.ElementAt(i));
+                dataChar.Add('0');
+                dataChar.Add(address.ElementAt(0));
             }
+            else
+            {
+                for (int i = 0; i < address.Length; i++)
+                {
+                    dataChar.Add(address.ElementAt(i));
+                }
+            }
+            //funkcja 1 lub 2
+            int function = Int32.Parse(cbCommandMaster.SelectedValue.ToString());
+            string funHex = function.ToString("X");
+            dataChar.Add('0'); //by bylo 01 lub 02, musi byc zero wczesniej
+            dataChar.Add(funHex.ElementAt(0));
+
+            //dane hex
             for (int i = 0; i < tbTransmittedDataMasterHex.Text.Length; i++)
             {
                 if (tbTransmittedDataMasterHex.Text.ElementAt(i) != ' ') {
                     dataChar.Add(tbTransmittedDataMasterHex.Text.ElementAt(i));
                 }
             }
+
+            //liczenie lrc
             sum += dec;
+            sum += function;
             for (int i = 0;i<tbTransmittedDataMaster.Text.Length;i++)
             {
                 string hex = ConvertStringToHex(tbTransmittedDataMaster.Text.ElementAt(i).ToString());
@@ -85,12 +104,41 @@ namespace IwSK_2
             int sB = Convert.ToInt32(sumByte[0]);
             sB = (255-sB)+1;
             string lrc = sB.ToString("X");
-            for (int i = 0; i < lrc.Length; i++)
+            //dodanie lrc
+            if (lrc.Length == 1)
             {
-                dataChar.Add(lrc.ElementAt(i));
+                dataChar.Add('0');
+                dataChar.Add(lrc.ElementAt(0));
+            }
+            else
+            {
+                for (int i = 0; i < lrc.Length; i++)
+                {
+                    dataChar.Add(lrc.ElementAt(i));
+                }
             }
             dataChar.Add('\r');
             dataChar.Add('\n');
+            convertASCIIToHex(dataChar);
+        }
+
+        private void convertASCIIToHex(List<char> data)
+        {
+            List<char> chars = new List<char>();
+            for (int i = 0;i< data.Count; i++)
+            {
+                string ascii = Convert.ToInt32(data.ElementAt(i)).ToString("X");
+                if (ascii.Length == 1)
+                {
+                    chars.Add('0');
+                    chars.Add(ascii.ElementAt(0));
+                }
+                else
+                {
+                    chars.Add(ascii.ElementAt(0));
+                    chars.Add(ascii.ElementAt(1));
+                }
+            }
         }
 
         private void btnConfigureSlave_Click(object sender, EventArgs e)
