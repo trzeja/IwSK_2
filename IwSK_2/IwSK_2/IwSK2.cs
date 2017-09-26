@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.IO.Ports;
 
 namespace IwSK_2
 {
@@ -23,6 +24,8 @@ namespace IwSK_2
             transactionType = TransactionType.Broadcast;
             cbCommandMaster.DataSource = commands.Take(1).ToList(); // rozkaz 2 dostepny tylko w adresowanej 
             cbCommandMaster.SelectedIndex = -1;
+            cbPorts.DataSource = SerialPort.GetPortNames();
+            cbPorts.SelectedIndex = -1;
         }
 
         private void rbMaster_CheckedChanged(object sender, EventArgs e)
@@ -118,26 +121,35 @@ namespace IwSK_2
             }
             dataChar.Add('\r');
             dataChar.Add('\n');
+            //tu mamy w charach ładnie wszystko, tylko na hex trzeba zmienić już do wyświetlania
             convertASCIIToHex(dataChar);
         }
 
         private void convertASCIIToHex(List<char> data)
         {
-            List<char> chars = new List<char>();
+            //List<char> chars = new List<char>();
+            string hexFrame = "";
             for (int i = 0;i< data.Count; i++)
             {
                 string ascii = Convert.ToInt32(data.ElementAt(i)).ToString("X");
                 if (ascii.Length == 1)
                 {
-                    chars.Add('0');
-                    chars.Add(ascii.ElementAt(0));
+                    hexFrame += "0";
                 }
-                else
-                {
-                    chars.Add(ascii.ElementAt(0));
-                    chars.Add(ascii.ElementAt(1));
-                }
+                hexFrame += ascii;
+                hexFrame += " ";
+                //if (ascii.Length == 1)
+                //{
+                //    chars.Add('0');
+                //    chars.Add(ascii.ElementAt(0));
+                //}
+                //else
+                //{
+                //    chars.Add(ascii.ElementAt(0));
+                //    chars.Add(ascii.ElementAt(1));
+                //}
             }
+            tbHexSendFrame.Text = hexFrame;
         }
 
         private void btnConfigureSlave_Click(object sender, EventArgs e)
@@ -188,6 +200,46 @@ namespace IwSK_2
                 nudAddressMaster.Minimum = 0;
                 nudAddressMaster.Value = 0;
             }
+
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void label9_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label15_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tbRecievedDataMasterHex_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tbTransmittedDataMasterHex_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label14_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label17_Click(object sender, EventArgs e)
+        {
 
         }
     }
