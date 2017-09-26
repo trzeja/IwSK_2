@@ -155,22 +155,7 @@ namespace IwSK_2
         private void btnConfigureSlave_Click(object sender, EventArgs e)
         {
             gbCommunicationSlave.Enabled = true;
-        }
-                
-        private void tbRecievedDataMaster_TextChanged(object sender, EventArgs e)
-        {
-            tbRecievedDataMasterHex.Text = ConvertStringToHex(tbRecievedDataMaster.Text);
-        }
-
-        private void tbTransmittedDataSlave_TextChanged(object sender, EventArgs e)
-        {
-            tbTransmittedDataSlaveHex.Text = ConvertStringToHex(tbTransmittedDataSlave.Text);
-        }
-
-        private void tbRecievedDataSlave_TextChanged(object sender, EventArgs e)
-        {
-            tbRecievedDataSlaveHex.Text = ConvertStringToHex(tbRecievedDataSlave.Text);
-        }
+        }  
 
         private string ConvertStringToHex(string text)
         {
