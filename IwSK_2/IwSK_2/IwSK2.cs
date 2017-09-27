@@ -27,7 +27,7 @@ namespace IwSK_2
             stationType = StationType.Master;
             transactionType = TransactionType.Broadcast;
             cbCommandMaster.DataSource = commands.Take(1).ToList(); // rozkaz 2 dostepny tylko w adresowanej 
-            cbCommandMaster.SelectedIndex = -1;
+            cbCommandMaster.SelectedIndex = 0;
             cbPortsMaster.DataSource = SerialPort.GetPortNames();
             cbPortsMaster.SelectedIndex = -1;
             cbPortsSlave.DataSource = SerialPort.GetPortNames();
