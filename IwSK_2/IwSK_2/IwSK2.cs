@@ -766,6 +766,22 @@ namespace IwSK_2
 
         }
 
+        private void clearInputButton_Click(object sender, EventArgs e)
+        {
+            this.tbTransmittedDataMaster.Text = "";
+            this.tbHexSendFrame.Text = "";
+            this.tbRecievedDataMaster.Text = "";
+            this.tbRecievedDataMasterHex.Text = "";
+        }
+
+        private void clearOutputButton_Click(object sender, EventArgs e)
+        {
+            this.tbTransmittedDataSlave.Text = "";
+            this.tbTransmittedDataSlaveHex.Text = "";
+            this.tbRecievedDataSlave.Text = "";
+            this.tbReceivedDataSlaveHex.Text = "";
+        }
+
         private int GetTimeoutValue(decimal fieldValue)
         {
             int value = Convert.ToInt32(fieldValue);
