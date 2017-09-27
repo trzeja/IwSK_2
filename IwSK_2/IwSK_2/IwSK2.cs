@@ -169,7 +169,7 @@ namespace IwSK_2
             dataChar.Add('\r');
             dataChar.Add('\n');
             //tu mamy w charach ładnie wszystko, tylko na hex trzeba zmienić już do wyświetlania
-            tbHexSendFrame.Text += convertASCIIToHex(dataChar);
+            tbHexSendFrame.Text += convertASCIIToHex(dataChar) + "\r\n";
             int retransmissionCount = 0;
             //TODO - Piotr, numer retransmisji moze być zerowy nie? ale musimy pierwszy raz wyslac ;)
             while (retransmissionCount < retransmissionAmount)
@@ -593,7 +593,68 @@ namespace IwSK_2
 
         private void commandOneAnswer(List<char> received, int i, int lrcSum)
         {
+            string dataToShow = "";
+            string hexData = "";
+            while (i < (received.Count - 5)) //przed suma kontrolna i delimiterami
+            {
+                hexData += received.ElementAt(i++);
+                hexData += received.ElementAt(i++);
+                int decData = Convert.ToInt32(hexData, 16);
+                lrcSum += decData;
+                char ascii = Convert.ToChar(decData);
+                dataToShow += ascii;
+                hexData = "";
+            }
+            string hexLrc = "";
+            hexLrc += received.ElementAt(i++);
+            hexLrc += received.ElementAt(i++);
+            //
+            byte[] sumByte = BitConverter.GetBytes(lrcSum);
+            int sB = Convert.ToInt32(sumByte[0]);
+            sB = (255 - sB) + 1;
+            string lrc = sB.ToString("X");
+            if (lrc.Length == 1)
+            {
+                lrc = '0' + lrc;
+            }
 
+            if (!hexLrc.Equals(lrc))
+            {
+                MessageBox.Show("Błąd odebranej ramki - złe LRC");
+            }
+            else
+            {
+                string del = "";
+                del += received.ElementAt(i++);
+                del += received.ElementAt(i++);
+                if (!del.Equals("\r\n"))
+                {
+                    MessageBox.Show("Błąd odebranej ramki - nie zgadza sie delimiter");
+                }
+                else
+                {
+                    if (tbRecievedDataMaster.InvokeRequired)
+                    {
+                        tbRecievedDataSlaveCallback call = new tbRecievedDataSlaveCallback(setTbRecievedDataMaster);
+                        this.Invoke(call, dataToShow);
+                    }
+                    else
+                    {
+                        tbRecievedDataMaster.Text += (dataToShow + "\r\n");
+                    }
+                    string hex = convertASCIIToHex(received);
+                    if (tbRecievedDataMasterHex.InvokeRequired)
+                    {
+                        tbRecievedDataSlaveCallback call = new tbRecievedDataSlaveCallback(setTbRecievedDataMasterHex);
+                        this.Invoke(call, hex);
+                    }
+                    else
+                    {
+                        tbRecievedDataMasterHex.Text += (hex + "\r\n");
+                    }
+
+                }
+            }
         }
 
         private void setTbRecievedDataMasterHex(string data)
