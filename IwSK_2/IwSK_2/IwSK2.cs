@@ -62,22 +62,31 @@ namespace IwSK_2
 
         private void btnConfigureMaster_Click(object sender, EventArgs e)
         {
-            gbCommunicationMaster.Enabled = true;
-            if (port == null)
+            
+            try
             {
-                ConfigureMasterPort();
-            }
-            else
-            {
-                if (port.PortName != cbPortsMaster.SelectedValue.ToString())
+                if (port == null)
                 {
-                    if (port.IsOpen)
-                    {
-                        port.Close();
-                    }
                     ConfigureMasterPort();
                 }
+                else
+                {
+                    if (port.PortName != cbPortsMaster.SelectedValue.ToString())
+                    {
+                        if (port.IsOpen)
+                        {
+                            port.Close();
+                        }
+                        ConfigureMasterPort();
+                    }
+                }
             }
+            catch (Exception)
+            {
+                MessageBox.Show("Nie wybrano poprawnego portu");
+                return;            
+            }
+            gbCommunicationMaster.Enabled = true;
         }
 
         private void ConfigureMasterPort()
@@ -200,29 +209,37 @@ namespace IwSK_2
         }
 
         private void btnConfigureSlave_Click(object sender, EventArgs e)
-        {
-            //konfiguracja reszty parametrow tu musi byc
-            gbCommunicationSlave.Enabled = true;
-            if (port == null)
+        {           
+            try
             {
-                port = new SerialPort(cbPortsSlave.SelectedValue.ToString());
-                port.DataReceived += new SerialDataReceivedEventHandler(dataReceivedHandler);
-
-                port.Open();
-            }
-            else
-            {
-                if (port.PortName != cbPortsSlave.SelectedValue.ToString())
+                //konfiguracja reszty parametrow tu musi byc
+                if (port == null)
                 {
-                    if (port.IsOpen)
-                    {
-                        port.Close();
-                    }
                     port = new SerialPort(cbPortsSlave.SelectedValue.ToString());
                     port.DataReceived += new SerialDataReceivedEventHandler(dataReceivedHandler);
+
                     port.Open();
                 }
+                else
+                {
+                    if (port.PortName != cbPortsSlave.SelectedValue.ToString())
+                    {
+                        if (port.IsOpen)
+                        {
+                            port.Close();
+                        }
+                        port = new SerialPort(cbPortsSlave.SelectedValue.ToString());
+                        port.DataReceived += new SerialDataReceivedEventHandler(dataReceivedHandler);
+                        port.Open();
+                    }
+                }
+            }           
+            catch (Exception)
+            {
+                MessageBox.Show("Nie wybrano poprawnego portu");
+                return;
             }
+            gbCommunicationSlave.Enabled = true;
         }  
 
         private void setTbRecievedDataSlave(string data)
