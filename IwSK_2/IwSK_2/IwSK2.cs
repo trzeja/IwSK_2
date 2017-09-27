@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.IO.Ports;
+using System.Diagnostics;
 
 namespace IwSK_2
 {
@@ -20,6 +21,10 @@ namespace IwSK_2
         private SerialPort port;
         private List<char> receivedChars = new List<char>();
         private int retransmissionAmount = 1;
+        private long interval = 0;
+        private long startTime, endTime = 0;
+        private Stopwatch timer;
+        private bool frameFinished = false;
 
         public IwSK2()
         {
@@ -62,7 +67,6 @@ namespace IwSK_2
 
         private void btnConfigureMaster_Click(object sender, EventArgs e)
         {
-            
             try
             {
                 if (port == null)
@@ -91,7 +95,9 @@ namespace IwSK_2
 
         private void ConfigureMasterPort()
         {
-            retransmissionAmount += Convert.ToInt32(nudRetransmissions.Text);
+            interval = (long)nudTimeConstraintMaster.Value;
+            retransmissionAmount = 1 + Convert.ToInt32(nudRetransmissions.Text);
+            timer = new Stopwatch();
             port = new SerialPort(cbPortsMaster.SelectedValue.ToString());
             port.DataReceived += new SerialDataReceivedEventHandler(dataReceivedHandler);
             port.ReadTimeout = GetTimeoutValue(nudTimeout.Value);
@@ -171,7 +177,6 @@ namespace IwSK_2
             //tu mamy w charach ładnie wszystko, tylko na hex trzeba zmienić już do wyświetlania
             tbHexSendFrame.Text += convertASCIIToHex(dataChar);
             int retransmissionCount = 0;
-            //TODO - Piotr, numer retransmisji moze być zerowy nie? ale musimy pierwszy raz wyslac ;)
             while (retransmissionCount < retransmissionAmount)
             {
                 try
@@ -222,6 +227,8 @@ namespace IwSK_2
                 //konfiguracja reszty parametrow tu musi byc
                 if (port == null)
                 {
+                    timer = new Stopwatch();
+                    interval = (long)nudTimeConstraintSlave.Value;
                     port = new SerialPort(cbPortsSlave.SelectedValue.ToString());
                     port.DataReceived += new SerialDataReceivedEventHandler(dataReceivedHandler);
 
@@ -235,6 +242,8 @@ namespace IwSK_2
                         {
                             port.Close();
                         }
+                        timer = new Stopwatch();
+                        interval = (long)nudTimeConstraintSlave.Value;
                         port = new SerialPort(cbPortsSlave.SelectedValue.ToString());
                         port.DataReceived += new SerialDataReceivedEventHandler(dataReceivedHandler);
                         port.Open();
@@ -503,17 +512,25 @@ namespace IwSK_2
 
         private void dataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
         {
+            timer = Stopwatch.StartNew();
             if (stationType == StationType.Slave) {
                 SerialPort senderPort = (SerialPort)sender;
                 int bytesToRead = senderPort.BytesToRead;
                 for (int i = 0; i < bytesToRead; i++)
                 {
                     //TODO -> tu będzie 
+                    endTime = startTime;
                     int intChar = senderPort.ReadChar();
+                    endTime = timer.ElapsedMilliseconds;
+                    if(endTime - startTime > interval)
+                    {
+                        receivedChars.Clear();
+                        frameFinished = false;
+                    }
                     char rChar = Convert.ToChar(intChar);
                     receivedChars.Add(rChar);
                     //sprawdzac i \r i \n czy to starczy?
-                    if (rChar == '\n')
+                    if (rChar == '\n' && frameFinished)
                     {
                         List<char> frame = new List<char>(receivedChars);
                         receivedDataTransformation(frame);
