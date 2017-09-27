@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.IO.Ports;
+using System.Diagnostics;
 
 namespace IwSK_2
 {
@@ -20,6 +21,9 @@ namespace IwSK_2
         private SerialPort port;
         private List<char> receivedChars = new List<char>();
         private int retransmissionAmount = 1;
+        private long interval = 0;
+        private long startTime, endTime = 0;
+        private Stopwatch timer;
 
         public IwSK2()
         {
@@ -44,8 +48,8 @@ namespace IwSK_2
             }
             else
             {
-               stationType = StationType.Slave;
-            } 
+                stationType = StationType.Slave;
+            }
         }
 
         private enum StationType
@@ -62,7 +66,6 @@ namespace IwSK_2
 
         private void btnConfigureMaster_Click(object sender, EventArgs e)
         {
-            
             try
             {
                 if (port == null)
@@ -71,27 +74,23 @@ namespace IwSK_2
                 }
                 else
                 {
-                    if (port.PortName != cbPortsMaster.SelectedValue.ToString())
-                    {
-                        if (port.IsOpen)
-                        {
-                            port.Close();
-                        }
-                        ConfigureMasterPort();
-                    }
+                    port.Close();
+                    ConfigureMasterPort();
                 }
             }
             catch (Exception)
             {
                 MessageBox.Show("Nie wybrano poprawnego portu");
-                return;            
+                return;
             }
             gbCommunicationMaster.Enabled = true;
         }
 
         private void ConfigureMasterPort()
         {
-            retransmissionAmount += Convert.ToInt32(nudRetransmissions.Text);
+            interval = Convert.ToInt64(nudTimeConstraintMaster.Text);
+            retransmissionAmount = 1 + Convert.ToInt32(nudRetransmissions.Text);
+            timer = new Stopwatch();
             port = new SerialPort(cbPortsMaster.SelectedValue.ToString());
             port.DataReceived += new SerialDataReceivedEventHandler(dataReceivedHandler);
             port.ReadTimeout = GetTimeoutValue(nudTimeout.Value);
@@ -105,7 +104,7 @@ namespace IwSK_2
             dataChar.Add(':');
             int sum = 0;
             int dec = Int32.Parse(nudAddressMaster.Text);
-            
+
             //adres
             string address = dec.ToString("X");
             if (address.Length == 1)
@@ -151,7 +150,7 @@ namespace IwSK_2
             }
             byte[] sumByte = BitConverter.GetBytes(sum);
             int sB = Convert.ToInt32(sumByte[0]);
-            sB = (255-sB)+1;
+            sB = (255 - sB) + 1;
             string lrc = sB.ToString("X");
             //dodanie lrc
             if (lrc.Length == 1)
@@ -171,7 +170,6 @@ namespace IwSK_2
             //tu mamy w charach ładnie wszystko, tylko na hex trzeba zmienić już do wyświetlania
             tbHexSendFrame.Text += convertASCIIToHex(dataChar) + "\r\n";
             int retransmissionCount = 0;
-            //TODO - Piotr, numer retransmisji moze być zerowy nie? ale musimy pierwszy raz wyslac ;)
             while (retransmissionCount < retransmissionAmount)
             {
                 try
@@ -191,7 +189,7 @@ namespace IwSK_2
         {
             //List<char> chars = new List<char>();
             string hexFrame = "";
-            for (int i = 0;i< data.Count; i++)
+            for (int i = 0; i < data.Count; i++)
             {
                 string ascii = Convert.ToInt32(data.ElementAt(i)).ToString("X");
                 if (ascii.Length == 1)
@@ -216,38 +214,36 @@ namespace IwSK_2
         }
 
         private void btnConfigureSlave_Click(object sender, EventArgs e)
-        {           
+        {
             try
             {
                 //konfiguracja reszty parametrow tu musi byc
                 if (port == null)
                 {
-                    port = new SerialPort(cbPortsSlave.SelectedValue.ToString());
-                    port.DataReceived += new SerialDataReceivedEventHandler(dataReceivedHandler);
-
-                    port.Open();
+                    ConfigureSlavePort();
                 }
                 else
                 {
-                    if (port.PortName != cbPortsSlave.SelectedValue.ToString())
-                    {
-                        if (port.IsOpen)
-                        {
-                            port.Close();
-                        }
-                        port = new SerialPort(cbPortsSlave.SelectedValue.ToString());
-                        port.DataReceived += new SerialDataReceivedEventHandler(dataReceivedHandler);
-                        port.Open();
-                    }
+                    port.Close();
+                    ConfigureSlavePort();
                 }
-            }           
+            }
             catch (Exception)
             {
                 MessageBox.Show("Nie wybrano poprawnego portu");
                 return;
             }
             gbCommunicationSlave.Enabled = true;
-        }  
+        }
+
+        private void ConfigureSlavePort()
+        {
+            timer = new Stopwatch();
+            interval = Convert.ToInt64(nudTimeConstraintSlave.Text);
+            port = new SerialPort(cbPortsSlave.SelectedValue.ToString());
+            port.DataReceived += new SerialDataReceivedEventHandler(dataReceivedHandler);
+            port.Open();
+        }
 
         private void setTbTransmittedDataSlaveHex(string data)
         {
@@ -327,7 +323,7 @@ namespace IwSK_2
                     {
                         tbReceivedDataSlaveHex.Text += (hex + "\r\n");
                     }
-                    
+
                 }
             }
         }
@@ -409,12 +405,12 @@ namespace IwSK_2
 
             //dane hex
             string data = ConvertStringToHex(tbTransmittedDataSlave.Text);
-            for (int i = 0; i< data.Length;i++)
+            for (int i = 0; i < data.Length; i++)
             {
-                if (data.ElementAt(i)!= ' ')
+                if (data.ElementAt(i) != ' ')
                 {
                     toSend.Add(data.ElementAt(i));
-                   // sum += Convert.ToInt32(data.ElementAt(i).ToString(),16);
+                    // sum += Convert.ToInt32(data.ElementAt(i).ToString(),16);
                 }
             }
             for (int i = 0; i < tbTransmittedDataSlave.Text.Length; i++)
@@ -471,7 +467,7 @@ namespace IwSK_2
                 string hexAddress = "";
                 hexAddress += received.ElementAt(i++);
                 hexAddress += received.ElementAt(i++);
-                int decAddress = Convert.ToInt32(hexAddress,16);
+                int decAddress = Convert.ToInt32(hexAddress, 16);
                 lrcSum += decAddress;
                 if ((decAddress != Int32.Parse(nudAdddressSlave.Text)) && (decAddress != 0))
                 {
@@ -483,15 +479,15 @@ namespace IwSK_2
                     string hexCommand = "";
                     hexCommand += received.ElementAt(i++);
                     hexCommand += received.ElementAt(i++);
-                    int decCommand = Convert.ToInt32(hexCommand,16);
+                    int decCommand = Convert.ToInt32(hexCommand, 16);
                     lrcSum += decCommand;
                     switch (decCommand)
                     {
                         case 1:
-                            commandOne(received,i,lrcSum);
+                            commandOne(received, i, lrcSum);
                             break;
                         case 2:
-                            commandTwo(received,i,lrcSum);
+                            commandTwo(received, i, lrcSum);
                             break;
                         default:
                             //jakis error gdy zla komenda, moze jakies przeklamania
@@ -503,13 +499,23 @@ namespace IwSK_2
 
         private void dataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
         {
-            if (stationType == StationType.Slave) {
+            timer = Stopwatch.StartNew();
+            if (stationType == StationType.Slave)
+            {
                 SerialPort senderPort = (SerialPort)sender;
-
-                for (int i = 0; i < senderPort.BytesToRead; i++)
+                int bytesToRead = senderPort.BytesToRead;
+                for (int i = 0; i < bytesToRead; i++)
                 {
                     //TODO -> tu będzie 
+                    endTime = startTime;
                     int intChar = senderPort.ReadChar();
+                    endTime = timer.ElapsedMilliseconds;
+                    if (endTime - startTime > interval)
+                    {
+                        receivedChars.Clear();
+                        MessageBox.Show("Przekroczono czas odbioru jednego znaku", "Błąd");
+                        break;
+                    }
                     char rChar = Convert.ToChar(intChar);
                     receivedChars.Add(rChar);
                     //sprawdzac i \r i \n czy to starczy?
@@ -525,7 +531,8 @@ namespace IwSK_2
             else //gdy jest masterem
             {
                 SerialPort senderPort = (SerialPort)sender;
-                for (int i=0; i< senderPort.BytesToRead; i++)
+                int bytesToRead = senderPort.BytesToRead;
+                for (int i = 0; i < bytesToRead; i++)
                 {
                     int intChar = senderPort.ReadChar();
                     char rChar = Convert.ToChar(intChar);
@@ -538,26 +545,26 @@ namespace IwSK_2
                         receivedChars.Clear();
                         //TODO -> tu pewnie bedzie odsylanie wiadomosci
                     }
-                } 
+                }
             }
         }
 
         private void receivedDataMaster(List<char> received)
         {
             int i = 0;
-            if (received.ElementAt(i++)!=':')
+            if (received.ElementAt(i++) != ':')
             {
                 //TODO - to nie ramka
                 MessageBox.Show("Odebrano dane bez znaku ':'");
             }
             else
             {
-                
+
                 int lrcSum = 0;
                 string hexAddress = "";
                 hexAddress += received.ElementAt(i++);
                 hexAddress += received.ElementAt(i++);
-                int decAddress = Convert.ToInt32(hexAddress,16);
+                int decAddress = Convert.ToInt32(hexAddress, 16);
                 lrcSum += decAddress;
                 if ((decAddress != Int32.Parse(nudAddressMaster.Text)))
                 {
@@ -569,15 +576,15 @@ namespace IwSK_2
                     string hexCommand = "";
                     hexCommand += received.ElementAt(i++);
                     hexCommand += received.ElementAt(i++);
-                    int decCommand = Convert.ToInt32(hexCommand,16);
+                    int decCommand = Convert.ToInt32(hexCommand, 16);
                     lrcSum += decCommand;
                     switch (decCommand)
                     {
                         case 1:
-                            commandOneAnswer(received,i,lrcSum);
+                            commandOneAnswer(received, i, lrcSum);
                             break;
                         case 2:
-                            commandTwoAnswer(received,i,lrcSum);
+                            commandTwoAnswer(received, i, lrcSum);
                             break;
                         case 129: //potwierdzenie z bledem od slave dla komendy 1
                             break;
