@@ -12,7 +12,7 @@ namespace IwSK_2
 {
     public partial class IwSK2 : Form
     {
-        delegate void tbRecievedDataSlaveCallback(char character);
+        delegate void tbRecievedDataSlaveCallback(string data);
         private List<string> commands = new List<string>(new string[] { "1", "2" });
 
         private StationType stationType;
@@ -204,15 +204,84 @@ namespace IwSK_2
             }
         }  
 
-        private void setTbRecievedDataSlave(char character)
+        private void setTbRecievedDataSlave(string data)
         {
-            tbRecievedDataSlave.Text += character;
+            tbRecievedDataSlave.Text += (data + "\r\n");
+        }
+
+        private void commandOne(List<char> received, int i)
+        {
+            string dataToShow = "";
+            string hexData = "";
+            while (i < (received.Count - 5)) //przed suma kontrolna i delimiterami
+            {
+                hexData += received.ElementAt(i++);
+                hexData += received.ElementAt(i++);
+                char ascii = Convert.ToChar(Convert.ToInt32(hexData,16));
+                dataToShow += ascii;
+                hexData = "";
+            }
+            //TODO - LRC sprawdzenie
+            //TODO - sprawdzenie delimiterow
+            if (tbRecievedDataSlave.InvokeRequired)
+            {
+                tbRecievedDataSlaveCallback call = new tbRecievedDataSlaveCallback(setTbRecievedDataSlave);
+                this.Invoke(call, dataToShow);
+            }
+            else
+            {
+                tbRecievedDataSlave.Text += (dataToShow + "\r\n");
+            }
+            //hexData += received.ElementAt(i++);
+            //hexData += received.ElementAt(i++);
+            //while (!hexData.Equals("\r\n")) //moze w nieskonczonosc gdy cos nie tak z delimiterami
+            //{
+
+            //    dataToShow += hexData;
+            //    hexData = "";
+            //    hexData += received.ElementAt(i++);
+            //    hexData += received.ElementAt(i++);
+            //}
+
         }
 
         private void receivedDataTransformation(List<char> received)
         {
+            int i = 0;
             //tbRecievedDataSlave.Text = received.ToString();
-
+            if (received.ElementAt(i++) != ':')
+            {
+                //TODO - to nie ramka
+            }
+            else
+            {
+                string hexAddress = "";
+                hexAddress += received.ElementAt(i++);
+                hexAddress += received.ElementAt(i++);
+                int decAddress = Convert.ToInt32(hexAddress,16);
+                if ((decAddress != Int32.Parse(nudAdddressSlave.Text)) && (decAddress != 0))
+                {
+                    //TODO - to nie do mnie
+                }
+                else
+                {
+                    string hexCommand = "";
+                    hexCommand += received.ElementAt(i++);
+                    hexCommand += received.ElementAt(i++);
+                    int decCommand = Convert.ToInt32(hexCommand,16);
+                    switch (decCommand)
+                    {
+                        case 1:
+                            commandOne(received,i);
+                            break;
+                        case 2:
+                            //TODO - komenda druga
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
         }
 
         private void dataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
