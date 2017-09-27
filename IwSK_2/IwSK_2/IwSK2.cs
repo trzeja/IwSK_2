@@ -127,20 +127,27 @@ namespace IwSK_2
             dataChar.Add(funHex.ElementAt(0));
 
             //dane hex
-            for (int i = 0; i < ConvertStringToHex(tbTransmittedDataMaster.Text).Length; i++)
+            if (function == 1)
             {
-                if (ConvertStringToHex(tbTransmittedDataMaster.Text).ElementAt(i) != ' ') {
-                    dataChar.Add(ConvertStringToHex(tbTransmittedDataMaster.Text).ElementAt(i));
+                for (int i = 0; i < ConvertStringToHex(tbTransmittedDataMaster.Text).Length; i++)
+                {
+                    if (ConvertStringToHex(tbTransmittedDataMaster.Text).ElementAt(i) != ' ')
+                    {
+                        dataChar.Add(ConvertStringToHex(tbTransmittedDataMaster.Text).ElementAt(i));
+                    }
                 }
             }
 
             //liczenie lrc
             sum += dec;
             sum += function;
-            for (int i = 0;i<tbTransmittedDataMaster.Text.Length;i++)
+            if (function == 1)
             {
-                string hex = ConvertStringToHex(tbTransmittedDataMaster.Text.ElementAt(i).ToString());
-                sum += Convert.ToInt32(hex,16);
+                for (int i = 0; i < tbTransmittedDataMaster.Text.Length; i++)
+                {
+                    string hex = ConvertStringToHex(tbTransmittedDataMaster.Text.ElementAt(i).ToString());
+                    sum += Convert.ToInt32(hex, 16);
+                }
             }
             byte[] sumByte = BitConverter.GetBytes(sum);
             int sB = Convert.ToInt32(sumByte[0]);
@@ -242,6 +249,11 @@ namespace IwSK_2
             gbCommunicationSlave.Enabled = true;
         }  
 
+        private void setTbTransmittedDataSlaveHex(string data)
+        {
+            tbTransmittedDataSlaveHex.Text += (data + "\r\n");
+        }
+
         private void setTbRecievedDataSlave(string data)
         {
             tbRecievedDataSlave.Text += (data + "\r\n");
@@ -315,9 +327,128 @@ namespace IwSK_2
                     {
                         tbReceivedDataSlaveHex.Text += (hex + "\r\n");
                     }
-                    // TODO - wyswietlic w hexie jeszcze
+                    
                 }
             }
+        }
+
+        private void commandTwo(List<char> received, int i, int lrcSum)
+        {
+            string hexLrc = "";
+            hexLrc += received.ElementAt(i++);
+            hexLrc += received.ElementAt(i++);
+            //
+            byte[] sumByte = BitConverter.GetBytes(lrcSum);
+            int sB = Convert.ToInt32(sumByte[0]);
+            sB = (255 - sB) + 1;
+            string lrc = sB.ToString("X");
+            if (lrc.Length == 1)
+            {
+                lrc = '0' + lrc;
+            }
+
+            if (!hexLrc.Equals(lrc))
+            {
+                MessageBox.Show("Złe LRC");
+                //TODO - lrc się nie zgadza, odpowiedz z bledem?
+            }
+            else
+            {
+                string del = "";
+                del += received.ElementAt(i++);
+                del += received.ElementAt(i++);
+                if (!del.Equals("\r\n"))
+                {
+                    MessageBox.Show("Nie zgadza sie delimiter");
+                    //TODO - nie zgadza sie delimiter
+                }
+                else
+                {
+                    string hex = convertASCIIToHex(received);
+                    if (tbReceivedDataSlaveHex.InvokeRequired)
+                    {
+                        tbRecievedDataSlaveCallback call = new tbRecievedDataSlaveCallback(setTbRecievedDataSlaveHex);
+                        this.Invoke(call, hex);
+                    }
+                    else
+                    {
+                        tbReceivedDataSlaveHex.Text += (hex + "\r\n");
+                    }
+                    //TODO - odeslac ramke z danymi od siebie
+                    sendFrameWithData(received);
+                }
+            }
+        }
+
+        private void sendFrameWithData(List<char> received)
+        {
+            List<char> toSend = new List<char>();
+            toSend.Add(':');
+            int sum = 0;
+            //adres
+            int dec = Int32.Parse(nudAdddressSlave.Text);
+            string address = dec.ToString("X");
+            if (address.Length == 1)
+            {
+                toSend.Add('0');
+                toSend.Add(address.ElementAt(0));
+            }
+            else
+            {
+                for (int i = 0; i < address.Length; i++)
+                {
+                    toSend.Add(address.ElementAt(i));
+                }
+            }
+
+            //funkcja
+            int function = 2;
+            string funHex = function.ToString("X");
+            toSend.Add('0'); //by bylo 01 lub 02, musi byc zero wczesniej
+            toSend.Add(funHex.ElementAt(0));
+
+            //dane hex
+            string data = ConvertStringToHex(tbTransmittedDataSlave.Text);
+            for (int i = 0; i< data.Length;i++)
+            {
+                if (data.ElementAt(i)!= ' ')
+                {
+                    toSend.Add(data.ElementAt(i));
+                    sum += Convert.ToInt32(data.ElementAt(i).ToString(),16);
+                }
+            }
+            sum += dec;
+            sum += function;
+            byte[] sumByte = BitConverter.GetBytes(sum);
+            int sB = Convert.ToInt32(sumByte[0]);
+            sB = (255 - sB) + 1;
+            string lrc = sB.ToString("X");
+            //dodanie lrc
+            if (lrc.Length == 1)
+            {
+                toSend.Add('0');
+                toSend.Add(lrc.ElementAt(0));
+            }
+            else
+            {
+                for (int i = 0; i < lrc.Length; i++)
+                {
+                    toSend.Add(lrc.ElementAt(i));
+                }
+            }
+            toSend.Add('\r');
+            toSend.Add('\n');
+            //tbTransmittedDataSlaveHex.Text = convertASCIIToHex(toSend);
+            if (tbTransmittedDataSlaveHex.InvokeRequired)
+            {
+                tbRecievedDataSlaveCallback call = new tbRecievedDataSlaveCallback(setTbTransmittedDataSlaveHex);
+                this.Invoke(call, convertASCIIToHex(toSend));
+            }
+            else
+            {
+                tbTransmittedDataSlaveHex.Text += (convertASCIIToHex(toSend) + "\r\n");
+            }
+            port.Write(toSend.ToArray<char>(), 0, toSend.Count);
         }
 
         private void receivedDataTransformation(List<char> received)
@@ -355,9 +486,10 @@ namespace IwSK_2
                             commandOne(received,i,lrcSum);
                             break;
                         case 2:
-                            //TODO - komenda druga
+                            commandTwo(received,i,lrcSum);
                             break;
                         default:
+                            //jakis error gdy zla komenda, moze jakies przeklamania
                             break;
                     }
                 }
@@ -383,15 +515,6 @@ namespace IwSK_2
                         receivedChars.Clear();
                         //TODO -> tu pewnie bedzie odsylanie wiadomosci
                     }
-                    //if (tbRecievedDataSlave.InvokeRequired)
-                    //{
-                    //    tbRecievedDataSlaveCallback call = new tbRecievedDataSlaveCallback(setTbRecievedDataSlave);
-                    //    this.Invoke(call, Convert.ToChar(senderPort.ReadChar()));
-                    //}
-                    //else
-                    //{
-                    //    tbRecievedDataSlave.Text += Convert.ToChar(senderPort.ReadChar());
-                    //}
                 }
             }
         }
