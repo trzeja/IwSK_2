@@ -82,7 +82,7 @@ namespace IwSK_2
 
         private void ConfigureMasterPort()
         {
-            retransmissionAmount = (int)nudRetransmissions.Value;
+            retransmissionAmount = Convert.ToInt32(nudRetransmissions.Text);
             port = new SerialPort(cbPortsMaster.SelectedValue.ToString());
             port.DataReceived += new SerialDataReceivedEventHandler(dataReceivedHandler);
             port.ReadTimeout = GetTimeoutValue(nudTimeout.Value);
@@ -153,9 +153,11 @@ namespace IwSK_2
             dataChar.Add('\r');
             dataChar.Add('\n');
             //tu mamy w charach ładnie wszystko, tylko na hex trzeba zmienić już do wyświetlania
-            convertASCIIToHex(dataChar);
+            tbHexSendFrame.Text = convertASCIIToHex(dataChar);
             int retransmissionCount = 0;
-            while(retransmissionCount < retransmissionAmount)
+            port.Write(dataChar.ToArray<char>(), 0, dataChar.Count);
+            //TODO - Piotr, numer retransmisji moze być zerowy nie? ale musimy pierwszy raz wyslac ;)
+            while (retransmissionCount < retransmissionAmount)
             {
                 try
                 {
@@ -170,7 +172,7 @@ namespace IwSK_2
             }
         }
 
-        private void convertASCIIToHex(List<char> data)
+        private string convertASCIIToHex(List<char> data)
         {
             //List<char> chars = new List<char>();
             string hexFrame = "";
@@ -194,7 +196,8 @@ namespace IwSK_2
                 //    chars.Add(ascii.ElementAt(1));
                 //}
             }
-            tbHexSendFrame.Text = hexFrame;
+            //tbHexSendFrame.Text = hexFrame;
+            return hexFrame;
         }
 
         private void btnConfigureSlave_Click(object sender, EventArgs e)
@@ -228,7 +231,12 @@ namespace IwSK_2
             tbRecievedDataSlave.Text += (data + "\r\n");
         }
 
-        private void commandOne(List<char> received, int i)
+        private void setTbRecievedDataSlaveHex(string data)
+        {
+            tbReceivedDataSlaveHex.Text += (data + "\r\n");
+        }
+
+        private void commandOne(List<char> received, int i, int lrcSum)
         {
             string dataToShow = "";
             string hexData = "";
@@ -236,32 +244,64 @@ namespace IwSK_2
             {
                 hexData += received.ElementAt(i++);
                 hexData += received.ElementAt(i++);
-                char ascii = Convert.ToChar(Convert.ToInt32(hexData,16));
+                int decData = Convert.ToInt32(hexData, 16);
+                lrcSum += decData;
+                char ascii = Convert.ToChar(decData);
                 dataToShow += ascii;
                 hexData = "";
             }
-            //TODO - LRC sprawdzenie
-            //TODO - sprawdzenie delimiterow
-            if (tbRecievedDataSlave.InvokeRequired)
+            string hexLrc = "";
+            hexLrc += received.ElementAt(i++);
+            hexLrc += received.ElementAt(i++);
+            //
+            byte[] sumByte = BitConverter.GetBytes(lrcSum);
+            int sB = Convert.ToInt32(sumByte[0]);
+            sB = (255 - sB) + 1;
+            string lrc = sB.ToString("X");
+            if (lrc.Length == 1)
             {
-                tbRecievedDataSlaveCallback call = new tbRecievedDataSlaveCallback(setTbRecievedDataSlave);
-                this.Invoke(call, dataToShow);
+                lrc = '0' + lrc;
+            }
+
+            if (!hexLrc.Equals(lrc))
+            {
+                MessageBox.Show("Złe LRC");
+                //TODO - lrc się nie zgadza, odpowiedz z bledem?
             }
             else
             {
-                tbRecievedDataSlave.Text += (dataToShow + "\r\n");
+                string del = "";
+                del += received.ElementAt(i++);
+                del += received.ElementAt(i++);
+                if (!del.Equals("\r\n"))
+                {
+                    MessageBox.Show("Nie zgadza sie delimiter");
+                    //TODO - nie zgadza sie delimiter
+                }
+                else
+                {
+                    if (tbRecievedDataSlave.InvokeRequired)
+                    {
+                        tbRecievedDataSlaveCallback call = new tbRecievedDataSlaveCallback(setTbRecievedDataSlave);
+                        this.Invoke(call, dataToShow);
+                    }
+                    else
+                    {
+                        tbRecievedDataSlave.Text += (dataToShow + "\r\n");
+                    }
+                    string hex = convertASCIIToHex(received);
+                    if (tbReceivedDataSlaveHex.InvokeRequired)
+                    {
+                        tbRecievedDataSlaveCallback call = new tbRecievedDataSlaveCallback(setTbRecievedDataSlaveHex);
+                        this.Invoke(call, hex);
+                    }
+                    else
+                    {
+                        tbReceivedDataSlaveHex.Text += (hex + "\r\n");
+                    }
+                    // TODO - wyswietlic w hexie jeszcze
+                }
             }
-            //hexData += received.ElementAt(i++);
-            //hexData += received.ElementAt(i++);
-            //while (!hexData.Equals("\r\n")) //moze w nieskonczonosc gdy cos nie tak z delimiterami
-            //{
-
-            //    dataToShow += hexData;
-            //    hexData = "";
-            //    hexData += received.ElementAt(i++);
-            //    hexData += received.ElementAt(i++);
-            //}
-
         }
 
         private void receivedDataTransformation(List<char> received)
@@ -271,16 +311,20 @@ namespace IwSK_2
             if (received.ElementAt(i++) != ':')
             {
                 //TODO - to nie ramka
+                MessageBox.Show("To nie ramka");
             }
             else
             {
+                int lrcSum = 0;
                 string hexAddress = "";
                 hexAddress += received.ElementAt(i++);
                 hexAddress += received.ElementAt(i++);
                 int decAddress = Convert.ToInt32(hexAddress,16);
+                lrcSum += decAddress;
                 if ((decAddress != Int32.Parse(nudAdddressSlave.Text)) && (decAddress != 0))
                 {
                     //TODO - to nie do mnie
+                    MessageBox.Show("To nie do mnie");
                 }
                 else
                 {
@@ -288,10 +332,11 @@ namespace IwSK_2
                     hexCommand += received.ElementAt(i++);
                     hexCommand += received.ElementAt(i++);
                     int decCommand = Convert.ToInt32(hexCommand,16);
+                    lrcSum += decCommand;
                     switch (decCommand)
                     {
                         case 1:
-                            commandOne(received,i);
+                            commandOne(received,i,lrcSum);
                             break;
                         case 2:
                             //TODO - komenda druga

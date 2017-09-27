@@ -67,7 +67,7 @@
             this.gbCommunicationSlave = new System.Windows.Forms.GroupBox();
             this.label11 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
-            this.tbRecievedDataSlaveHex = new System.Windows.Forms.TextBox();
+            this.tbReceivedDataSlaveHex = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.tbRecievedDataSlave = new System.Windows.Forms.TextBox();
@@ -541,7 +541,7 @@
             // 
             this.gbCommunicationSlave.Controls.Add(this.label11);
             this.gbCommunicationSlave.Controls.Add(this.label19);
-            this.gbCommunicationSlave.Controls.Add(this.tbRecievedDataSlaveHex);
+            this.gbCommunicationSlave.Controls.Add(this.tbReceivedDataSlaveHex);
             this.gbCommunicationSlave.Controls.Add(this.label16);
             this.gbCommunicationSlave.Controls.Add(this.label10);
             this.gbCommunicationSlave.Controls.Add(this.tbRecievedDataSlave);
@@ -571,28 +571,28 @@
             this.label19.AutoSize = true;
             this.label19.Location = new System.Drawing.Point(7, 255);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(36, 17);
+            this.label19.Size = new System.Drawing.Size(145, 17);
             this.label19.TabIndex = 25;
-            this.label19.Text = "Hex:";
+            this.label19.Text = "Odebrana ramka hex:";
             // 
-            // tbRecievedDataSlaveHex
+            // tbReceivedDataSlaveHex
             // 
-            this.tbRecievedDataSlaveHex.Location = new System.Drawing.Point(11, 273);
-            this.tbRecievedDataSlaveHex.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tbRecievedDataSlaveHex.Multiline = true;
-            this.tbRecievedDataSlaveHex.Name = "tbRecievedDataSlaveHex";
-            this.tbRecievedDataSlaveHex.ReadOnly = true;
-            this.tbRecievedDataSlaveHex.Size = new System.Drawing.Size(425, 47);
-            this.tbRecievedDataSlaveHex.TabIndex = 24;
+            this.tbReceivedDataSlaveHex.Location = new System.Drawing.Point(11, 273);
+            this.tbReceivedDataSlaveHex.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tbReceivedDataSlaveHex.Multiline = true;
+            this.tbReceivedDataSlaveHex.Name = "tbReceivedDataSlaveHex";
+            this.tbReceivedDataSlaveHex.ReadOnly = true;
+            this.tbReceivedDataSlaveHex.Size = new System.Drawing.Size(425, 47);
+            this.tbReceivedDataSlaveHex.TabIndex = 24;
             // 
             // label16
             // 
             this.label16.AutoSize = true;
             this.label16.Location = new System.Drawing.Point(7, 103);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(36, 17);
+            this.label16.Size = new System.Drawing.Size(135, 17);
             this.label16.TabIndex = 21;
-            this.label16.Text = "Hex:";
+            this.label16.Text = "Wysłana ramka hex:";
             // 
             // label10
             // 
@@ -847,7 +847,7 @@
         private System.Windows.Forms.TextBox tbRecievedDataMasterHex;
         private System.Windows.Forms.TextBox tbRecievedDataMaster;
         private System.Windows.Forms.Label label19;
-        private System.Windows.Forms.TextBox tbRecievedDataSlaveHex;
+        private System.Windows.Forms.TextBox tbReceivedDataSlaveHex;
         private System.Windows.Forms.TextBox tbRecievedDataSlave;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.TextBox tbTransmittedDataSlaveHex;
