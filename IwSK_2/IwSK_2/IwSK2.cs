@@ -19,7 +19,7 @@ namespace IwSK_2
         private TransactionType transactionType;
         private SerialPort port;
         private List<char> receivedChars = new List<char>();
-        private int retransmissionAmount = 0;
+        private int retransmissionAmount = 1;
 
         public IwSK2()
         {
@@ -82,7 +82,7 @@ namespace IwSK_2
 
         private void ConfigureMasterPort()
         {
-            retransmissionAmount = Convert.ToInt32(nudRetransmissions.Text);
+            retransmissionAmount += Convert.ToInt32(nudRetransmissions.Text);
             port = new SerialPort(cbPortsMaster.SelectedValue.ToString());
             port.DataReceived += new SerialDataReceivedEventHandler(dataReceivedHandler);
             port.ReadTimeout = GetTimeoutValue(nudTimeout.Value);
