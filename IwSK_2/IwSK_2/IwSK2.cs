@@ -260,7 +260,7 @@ namespace IwSK_2
             tbReceivedDataSlaveHex.Text += (data + "\r\n");
         }
 
-        private void commandOne(List<char> received, int i, int lrcSum)
+        private void commandOne(List<char> received, int i, int lrcSum,bool broadcast)
         {
             string dataToShow = "";
             string hexData = "";
@@ -289,8 +289,11 @@ namespace IwSK_2
 
             if (!hexLrc.Equals(lrc))
             {
-                MessageBox.Show("Złe LRC");
-                //TODO - lrc się nie zgadza, odpowiedz z bledem?
+                if (!broadcast)
+                {
+                    sendErrorFrame(3,1);
+                }
+                //MessageBox.Show("Złe LRC");
             }
             else
             {
@@ -299,7 +302,11 @@ namespace IwSK_2
                 del += received.ElementAt(i++);
                 if (!del.Equals("\r\n"))
                 {
-                    MessageBox.Show("Nie zgadza sie delimiter");
+                    if (!broadcast)
+                    {
+                        sendErrorFrame(4,1);
+                    }
+                    //MessageBox.Show("Nie zgadza sie delimiter");
                     //TODO - nie zgadza sie delimiter
                 }
                 else
@@ -323,9 +330,153 @@ namespace IwSK_2
                     {
                         tbReceivedDataSlaveHex.Text += (hex + "\r\n");
                     }
-
+                    //tu odslamy ramke ze wszystko ok
+                    if (!broadcast)
+                    {
+                        sendConfirmationFrame();
+                    }
                 }
             }
+        }
+
+        private void sendErrorFrame(int errorCode, int functionNr)
+        {
+            List<char> toSend = new List<char>();
+            toSend.Add(':');
+            int sum = 0;
+            //adres
+            int dec = Int32.Parse(nudAdddressSlave.Text);
+            string address = dec.ToString("X");
+            if (address.Length == 1)
+            {
+                toSend.Add('0');
+                toSend.Add(address.ElementAt(0));
+            }
+            else
+            {
+                for (int i = 0; i < address.Length; i++)
+                {
+                    toSend.Add(address.ElementAt(i));
+                }
+            }
+
+            //numer funkcji
+            int function = 128+functionNr;
+            string funHex = function.ToString("X");
+            if (funHex.Length == 1)
+            {
+                toSend.Add('0');
+                toSend.Add(funHex.ElementAt(0));
+            }
+            else
+            {
+                for (int i = 0; i < funHex.Length; i++)
+                {
+                    toSend.Add(funHex.ElementAt(i));
+                }
+            }
+            //dane - numer erroru
+            for (int i = 0; i < ConvertStringToHex(errorCode.ToString()).Length; i++)
+            {
+                if (ConvertStringToHex(errorCode.ToString()).ElementAt(i) != ' ')
+                {
+                    toSend.Add(ConvertStringToHex(errorCode.ToString()).ElementAt(i));
+                }
+            }
+            //
+            sum += dec;
+            sum += function;
+            string hex = ConvertStringToHex(errorCode.ToString());
+            sum += Convert.ToInt32(hex, 16);
+            byte[] sumByte = BitConverter.GetBytes(sum);
+            int sB = Convert.ToInt32(sumByte[0]);
+            sB = (255 - sB) + 1;
+            string lrc = sB.ToString("X");
+            //dodanie lrc
+            if (lrc.Length == 1)
+            {
+                toSend.Add('0');
+                toSend.Add(lrc.ElementAt(0));
+            }
+            else
+            {
+                for (int i = 0; i < lrc.Length; i++)
+                {
+                    toSend.Add(lrc.ElementAt(i));
+                }
+            }
+            toSend.Add('\r');
+            toSend.Add('\n');
+            if (tbTransmittedDataSlaveHex.InvokeRequired)
+            {
+                tbRecievedDataSlaveCallback call = new tbRecievedDataSlaveCallback(setTbTransmittedDataSlaveHex);
+                this.Invoke(call, convertASCIIToHex(toSend));
+            }
+            else
+            {
+                tbTransmittedDataSlaveHex.Text += (convertASCIIToHex(toSend) + "\r\n");
+            }
+            port.Write(toSend.ToArray<char>(), 0, toSend.Count);
+        }
+
+        private void sendConfirmationFrame()
+        {
+            List<char> toSend = new List<char>();
+            toSend.Add(':');
+            int sum = 0;
+            //adres
+            int dec = Int32.Parse(nudAdddressSlave.Text);
+            string address = dec.ToString("X");
+            if (address.Length == 1)
+            {
+                toSend.Add('0');
+                toSend.Add(address.ElementAt(0));
+            }
+            else
+            {
+                for (int i = 0; i < address.Length; i++)
+                {
+                    toSend.Add(address.ElementAt(i));
+                }
+            }
+            //funkcja
+            int function = 1;
+            string funHex = function.ToString("X");
+            toSend.Add('0'); //by bylo 01 lub 02, musi byc zero wczesniej
+            toSend.Add(funHex.ElementAt(0));
+
+            sum += dec;
+            sum += function;
+            byte[] sumByte = BitConverter.GetBytes(sum);
+            int sB = Convert.ToInt32(sumByte[0]);
+            sB = (255 - sB) + 1;
+            string lrc = sB.ToString("X");
+            //dodanie lrc
+            if (lrc.Length == 1)
+            {
+                toSend.Add('0');
+                toSend.Add(lrc.ElementAt(0));
+            }
+            else
+            {
+                for (int i = 0; i < lrc.Length; i++)
+                {
+                    toSend.Add(lrc.ElementAt(i));
+                }
+            }
+            toSend.Add('\r');
+            toSend.Add('\n');
+            //tbTransmittedDataSlaveHex.Text = convertASCIIToHex(toSend);
+            if (tbTransmittedDataSlaveHex.InvokeRequired)
+            {
+                tbRecievedDataSlaveCallback call = new tbRecievedDataSlaveCallback(setTbTransmittedDataSlaveHex);
+                this.Invoke(call, convertASCIIToHex(toSend));
+            }
+            else
+            {
+                tbTransmittedDataSlaveHex.Text += (convertASCIIToHex(toSend) + "\r\n");
+            }
+            port.Write(toSend.ToArray<char>(), 0, toSend.Count);
         }
 
         private void commandTwo(List<char> received, int i, int lrcSum)
@@ -345,7 +496,8 @@ namespace IwSK_2
 
             if (!hexLrc.Equals(lrc))
             {
-                MessageBox.Show("Złe LRC");
+                sendErrorFrame(3,2);
+                //MessageBox.Show("Złe LRC");
                 //TODO - lrc się nie zgadza, odpowiedz z bledem?
             }
             else
@@ -355,7 +507,8 @@ namespace IwSK_2
                 del += received.ElementAt(i++);
                 if (!del.Equals("\r\n"))
                 {
-                    MessageBox.Show("Nie zgadza sie delimiter");
+                    sendErrorFrame(4,2);
+                    //MessageBox.Show("Nie zgadza sie delimiter");
                     //TODO - nie zgadza sie delimiter
                 }
                 else
@@ -459,7 +612,8 @@ namespace IwSK_2
             if (received.ElementAt(i++) != ':')
             {
                 //TODO - to nie ramka
-                MessageBox.Show("To nie ramka");
+                //MessageBox.Show("To nie ramka");
+                sendErrorFrame(1,1);
             }
             else
             {
@@ -469,10 +623,15 @@ namespace IwSK_2
                 hexAddress += received.ElementAt(i++);
                 int decAddress = Convert.ToInt32(hexAddress, 16);
                 lrcSum += decAddress;
+                bool broadcast = false;
+                if (decAddress == 0)
+                {
+                    broadcast = true;
+                }
                 if ((decAddress != Int32.Parse(nudAdddressSlave.Text)) && (decAddress != 0))
                 {
-                    //TODO - to nie do mnie
-                    MessageBox.Show("To nie do mnie");
+                    //MessageBox.Show("To nie do mnie");
+                    //jak nie do mnie to nic wiecej nie robimy
                 }
                 else
                 {
@@ -484,12 +643,14 @@ namespace IwSK_2
                     switch (decCommand)
                     {
                         case 1:
-                            commandOne(received, i, lrcSum);
+                            commandOne(received, i, lrcSum,broadcast);
                             break;
                         case 2:
                             commandTwo(received, i, lrcSum);
                             break;
                         default:
+                            sendErrorFrame(2,decCommand);
+                            
                             //jakis error gdy zla komenda, moze jakies przeklamania
                             break;
                     }
@@ -513,7 +674,8 @@ namespace IwSK_2
                     if (endTime - startTime > interval)
                     {
                         receivedChars.Clear();
-                        MessageBox.Show("Przekroczono czas odbioru jednego znaku", "Błąd");
+                        //MessageBox.Show("Przekroczono czas odbioru jednego znaku", "Błąd");
+                        sendErrorFrame(5,1);
                         break;
                     }
                     char rChar = Convert.ToChar(intChar);
@@ -555,7 +717,7 @@ namespace IwSK_2
             if (received.ElementAt(i++) != ':')
             {
                 //TODO - to nie ramka
-                MessageBox.Show("Odebrano dane bez znaku ':'");
+                MessageBox.Show("Odebrano dane bez znacznika początku ':'");
             }
             else
             {
@@ -587,13 +749,103 @@ namespace IwSK_2
                             commandTwoAnswer(received, i, lrcSum);
                             break;
                         case 129: //potwierdzenie z bledem od slave dla komendy 1
+                            commandErrorAnswer(received,i,lrcSum);
                             break;
                         case 130: //potwierdzenie z bledem od slave dla komedy 2
+                            commandErrorAnswer(received, i, lrcSum);
                             break;
                         default:
+                            MessageBox.Show("Odebrano ramkę z nieznaną komendą");
                             //jakis error gdy zla komenda, moze jakies przeklamania
                             break;
                     }
+                }
+            }
+        }
+
+        private void commandErrorAnswer(List<char> received, int i, int lrcSum)
+        {
+            string errorCode = "";
+            string hexData = "";
+            while (i < (received.Count - 5)) //przed suma kontrolna i delimiterami
+            {
+                hexData += received.ElementAt(i++);
+                hexData += received.ElementAt(i++);
+                int decData = Convert.ToInt32(hexData, 16);
+                lrcSum += decData;
+                char ascii = Convert.ToChar(decData);
+                errorCode += ascii;
+                hexData = "";
+            }
+            string hexLrc = "";
+            hexLrc += received.ElementAt(i++);
+            hexLrc += received.ElementAt(i++);
+            //
+            byte[] sumByte = BitConverter.GetBytes(lrcSum);
+            int sB = Convert.ToInt32(sumByte[0]);
+            sB = (255 - sB) + 1;
+            string lrc = sB.ToString("X");
+            if (lrc.Length == 1)
+            {
+                lrc = '0' + lrc;
+            }
+
+            if (!hexLrc.Equals(lrc))
+            {
+                MessageBox.Show("Odebrano przekłamaną ramkę - złe LRC");
+            }
+            else
+            {
+                string del = "";
+                del += received.ElementAt(i++);
+                del += received.ElementAt(i++);
+                if (!del.Equals("\r\n"))
+                {
+                    MessageBox.Show("Błąd odebranej ramki - nie zgadza sie znacznik końca");
+                }
+                else
+                {
+                    switch (Convert.ToInt32(errorCode))
+                    {
+                        case 1:
+                            MessageBox.Show("Slave nie otrzymał znacznika początku ':'");
+                            break;
+                        case 2:
+                            MessageBox.Show("Slave nie rozpoznał rozkazu");
+                            break;
+                        case 3:
+                            MessageBox.Show("Slave otrzymał przekłamaną ramkę - błędne LRC");
+                            break;
+                        case 4:
+                            MessageBox.Show("Slave otrzymał zły znacznik końca w ramce");
+                            break;
+                        case 5:
+                            MessageBox.Show("Slave przekroczył czas odbioru jednego znaku w ramce");
+                            break;
+                        default:
+                            MessageBox.Show("Slave zwrócił nieznany błąd");
+                            break;
+                    }
+                    //if (tbRecievedDataMaster.InvokeRequired)
+                    //{
+                    //    tbRecievedDataSlaveCallback call = new tbRecievedDataSlaveCallback(setTbRecievedDataMaster);
+                    //    this.Invoke(call, dataToShow);
+                    //}
+                    //else
+                    //{
+                    //    tbRecievedDataMaster.Text += (dataToShow + "\r\n");
+                    //}
+                    string hex = convertASCIIToHex(received);
+                    if (tbRecievedDataMasterHex.InvokeRequired)
+                    {
+                        tbRecievedDataSlaveCallback call = new tbRecievedDataSlaveCallback(setTbRecievedDataMasterHex);
+                        this.Invoke(call, hex);
+                    }
+                    else
+                    {
+                        tbRecievedDataMasterHex.Text += (hex + "\r\n");
+                    }
+
                 }
             }
         }
@@ -627,7 +879,7 @@ namespace IwSK_2
 
             if (!hexLrc.Equals(lrc))
             {
-                MessageBox.Show("Błąd odebranej ramki - złe LRC");
+                MessageBox.Show("Odebrano przekłamaną ramkę - złe LRC");
             }
             else
             {
@@ -636,29 +888,31 @@ namespace IwSK_2
                 del += received.ElementAt(i++);
                 if (!del.Equals("\r\n"))
                 {
-                    MessageBox.Show("Błąd odebranej ramki - nie zgadza sie delimiter");
+                    MessageBox.Show("Błąd odebranej ramki - nie zgadza się znacznik końca");
                 }
                 else
                 {
-                    if (tbRecievedDataMaster.InvokeRequired)
-                    {
-                        tbRecievedDataSlaveCallback call = new tbRecievedDataSlaveCallback(setTbRecievedDataMaster);
-                        this.Invoke(call, dataToShow);
-                    }
-                    else
-                    {
-                        tbRecievedDataMaster.Text += (dataToShow + "\r\n");
-                    }
-                    string hex = convertASCIIToHex(received);
-                    if (tbRecievedDataMasterHex.InvokeRequired)
-                    {
-                        tbRecievedDataSlaveCallback call = new tbRecievedDataSlaveCallback(setTbRecievedDataMasterHex);
-                        this.Invoke(call, hex);
-                    }
-                    else
-                    {
-                        tbRecievedDataMasterHex.Text += (hex + "\r\n");
-                    }
+                    
+                        //if (tbRecievedDataMaster.InvokeRequired)
+                        //{
+                        //    tbRecievedDataSlaveCallback call = new tbRecievedDataSlaveCallback(setTbRecievedDataMaster);
+                        //    this.Invoke(call, dataToShow);
+                        //}
+                        //else
+                        //{
+                        //    tbRecievedDataMaster.Text += (dataToShow + "\r\n");
+                        //}
+                        string hex = convertASCIIToHex(received);
+                        if (tbRecievedDataMasterHex.InvokeRequired)
+                        {
+                            tbRecievedDataSlaveCallback call = new tbRecievedDataSlaveCallback(setTbRecievedDataMasterHex);
+                            this.Invoke(call, hex);
+                        }
+                        else
+                        {
+                            tbRecievedDataMasterHex.Text += (hex + "\r\n");
+                        }
+                    
 
                 }
             }
@@ -703,7 +957,7 @@ namespace IwSK_2
 
             if (!hexLrc.Equals(lrc))
             {
-                MessageBox.Show("Błąd odebranej ramki - złe LRC");
+                MessageBox.Show("Odebrano przekłamaną ramkę - złe LRC");
             }
             else
             {
@@ -712,7 +966,7 @@ namespace IwSK_2
                 del += received.ElementAt(i++);
                 if (!del.Equals("\r\n"))
                 {
-                    MessageBox.Show("Błąd odebranej ramki - nie zgadza sie delimiter");
+                    MessageBox.Show("Błąd odebranej ramki - nie zgadza się znacznik końca");
                 }
                 else
                 {
