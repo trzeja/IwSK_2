@@ -696,7 +696,15 @@ namespace IwSK_2
                 int bytesToRead = senderPort.BytesToRead;
                 for (int i = 0; i < bytesToRead; i++)
                 {
+                    endTime = startTime;
                     int intChar = senderPort.ReadChar();
+                    endTime = timer.ElapsedMilliseconds;
+                    if (endTime - startTime > interval)
+                    {
+                        receivedChars.Clear();
+                        MessageBox.Show("Przekroczono czas odbioru jednego znaku", "Błąd");
+                        break;
+                    }
                     char rChar = Convert.ToChar(intChar);
                     receivedChars.Add(rChar);
                     //sprawdzac i \r i \n czy to starczy?
@@ -1018,6 +1026,22 @@ namespace IwSK_2
                 nudAddressMaster.Value = 0;
             }
 
+        }
+
+        private void clearInputButton_Click(object sender, EventArgs e)
+        {
+            this.tbTransmittedDataMaster.Text = "";
+            this.tbHexSendFrame.Text = "";
+            this.tbRecievedDataMaster.Text = "";
+            this.tbRecievedDataMasterHex.Text = "";
+        }
+
+        private void clearOutputButton_Click(object sender, EventArgs e)
+        {
+            this.tbTransmittedDataSlave.Text = "";
+            this.tbTransmittedDataSlaveHex.Text = "";
+            this.tbRecievedDataSlave.Text = "";
+            this.tbReceivedDataSlaveHex.Text = "";
         }
 
         private int GetTimeoutValue(decimal fieldValue)
