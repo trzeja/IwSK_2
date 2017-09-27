@@ -19,6 +19,7 @@ namespace IwSK_2
         private TransactionType transactionType;
         private SerialPort port;
         private List<char> receivedChars = new List<char>();
+        private int retransmissionAmount = 0;
 
         public IwSK2()
         {
@@ -64,10 +65,7 @@ namespace IwSK_2
             gbCommunicationMaster.Enabled = true;
             if (port == null)
             {
-                port = new SerialPort(cbPortsMaster.SelectedValue.ToString());
-                port.DataReceived += new SerialDataReceivedEventHandler(dataReceivedHandler);
-
-                port.Open();
+                ConfigureMasterPort();
             }
             else
             {
@@ -77,11 +75,19 @@ namespace IwSK_2
                     {
                         port.Close();
                     }
-                    port = new SerialPort(cbPortsMaster.SelectedValue.ToString());
-                    port.DataReceived += new SerialDataReceivedEventHandler(dataReceivedHandler);
-                    port.Open();
+                    ConfigureMasterPort();
                 }
             }
+        }
+
+        private void ConfigureMasterPort()
+        {
+            retransmissionAmount = (int)nudRetransmissions.Value;
+            port = new SerialPort(cbPortsMaster.SelectedValue.ToString());
+            port.DataReceived += new SerialDataReceivedEventHandler(dataReceivedHandler);
+            port.ReadTimeout = GetTimeoutValue(nudTimeout.Value);
+            port.WriteTimeout = GetTimeoutValue(nudTimeout.Value);
+            port.Open();
         }
 
         private void btnSendMaster_Click(object sender, EventArgs e)
@@ -148,7 +154,20 @@ namespace IwSK_2
             dataChar.Add('\n');
             //tu mamy w charach ładnie wszystko, tylko na hex trzeba zmienić już do wyświetlania
             convertASCIIToHex(dataChar);
-            port.Write(dataChar.ToArray<char>(),0,dataChar.Count);
+            int retransmissionCount = 0;
+            while(retransmissionCount < retransmissionAmount)
+            {
+                try
+                {
+                    port.Write(dataChar.ToArray<char>(), 0, dataChar.Count);
+                }
+                catch (TimeoutException)
+                {
+                    retransmissionCount++;
+                    continue;
+                }
+                break;
+            }
         }
 
         private void convertASCIIToHex(List<char> data)
@@ -340,6 +359,14 @@ namespace IwSK_2
                 nudAddressMaster.Value = 0;
             }
 
+        }
+
+        private int GetTimeoutValue(decimal fieldValue)
+        {
+            int value = Convert.ToInt32(fieldValue);
+            if (value == 0)
+                value = -1;
+            return value;
         }
     }
 }
