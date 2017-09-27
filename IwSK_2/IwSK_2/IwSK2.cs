@@ -534,7 +534,15 @@ namespace IwSK_2
                 int bytesToRead = senderPort.BytesToRead;
                 for (int i = 0; i < bytesToRead; i++)
                 {
+                    endTime = startTime;
                     int intChar = senderPort.ReadChar();
+                    endTime = timer.ElapsedMilliseconds;
+                    if (endTime - startTime > interval)
+                    {
+                        receivedChars.Clear();
+                        MessageBox.Show("Przekroczono czas odbioru jednego znaku", "Błąd");
+                        break;
+                    }
                     char rChar = Convert.ToChar(intChar);
                     receivedChars.Add(rChar);
                     //sprawdzac i \r i \n czy to starczy?
