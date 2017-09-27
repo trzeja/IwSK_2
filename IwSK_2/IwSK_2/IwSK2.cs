@@ -169,7 +169,7 @@ namespace IwSK_2
             dataChar.Add('\r');
             dataChar.Add('\n');
             //tu mamy w charach ładnie wszystko, tylko na hex trzeba zmienić już do wyświetlania
-            tbHexSendFrame.Text = convertASCIIToHex(dataChar);
+            tbHexSendFrame.Text += convertASCIIToHex(dataChar);
             int retransmissionCount = 0;
             //TODO - Piotr, numer retransmisji moze być zerowy nie? ale musimy pierwszy raz wyslac ;)
             while (retransmissionCount < retransmissionAmount)
@@ -414,8 +414,13 @@ namespace IwSK_2
                 if (data.ElementAt(i)!= ' ')
                 {
                     toSend.Add(data.ElementAt(i));
-                    sum += Convert.ToInt32(data.ElementAt(i).ToString(),16);
+                   // sum += Convert.ToInt32(data.ElementAt(i).ToString(),16);
                 }
+            }
+            for (int i = 0; i < tbTransmittedDataSlave.Text.Length; i++)
+            {
+                string hex = ConvertStringToHex(tbTransmittedDataSlave.Text.ElementAt(i).ToString());
+                sum += Convert.ToInt32(hex, 16);
             }
             sum += dec;
             sum += function;
@@ -515,6 +520,154 @@ namespace IwSK_2
                         receivedChars.Clear();
                         //TODO -> tu pewnie bedzie odsylanie wiadomosci
                     }
+                }
+            }
+            else //gdy jest masterem
+            {
+                SerialPort senderPort = (SerialPort)sender;
+                for (int i=0; i< senderPort.BytesToRead; i++)
+                {
+                    int intChar = senderPort.ReadChar();
+                    char rChar = Convert.ToChar(intChar);
+                    receivedChars.Add(rChar);
+                    //sprawdzac i \r i \n czy to starczy?
+                    if (rChar == '\n')
+                    {
+                        List<char> frame = new List<char>(receivedChars);
+                        receivedDataMaster(frame);
+                        receivedChars.Clear();
+                        //TODO -> tu pewnie bedzie odsylanie wiadomosci
+                    }
+                } 
+            }
+        }
+
+        private void receivedDataMaster(List<char> received)
+        {
+            int i = 0;
+            if (received.ElementAt(i++)!=':')
+            {
+                //TODO - to nie ramka
+                MessageBox.Show("Odebrano dane bez znaku ':'");
+            }
+            else
+            {
+                
+                int lrcSum = 0;
+                string hexAddress = "";
+                hexAddress += received.ElementAt(i++);
+                hexAddress += received.ElementAt(i++);
+                int decAddress = Convert.ToInt32(hexAddress,16);
+                lrcSum += decAddress;
+                if ((decAddress != Int32.Parse(nudAddressMaster.Text)))
+                {
+                    //TODO - to nie do mnie
+                    MessageBox.Show("Odpowiedż od złego adresu");
+                }
+                else
+                {
+                    string hexCommand = "";
+                    hexCommand += received.ElementAt(i++);
+                    hexCommand += received.ElementAt(i++);
+                    int decCommand = Convert.ToInt32(hexCommand,16);
+                    lrcSum += decCommand;
+                    switch (decCommand)
+                    {
+                        case 1:
+                            commandOneAnswer(received,i,lrcSum);
+                            break;
+                        case 2:
+                            commandTwoAnswer(received,i,lrcSum);
+                            break;
+                        case 129: //potwierdzenie z bledem od slave dla komendy 1
+                            break;
+                        case 130: //potwierdzenie z bledem od slave dla komedy 2
+                            break;
+                        default:
+                            //jakis error gdy zla komenda, moze jakies przeklamania
+                            break;
+                    }
+                }
+            }
+        }
+
+        private void commandOneAnswer(List<char> received, int i, int lrcSum)
+        {
+
+        }
+
+        private void setTbRecievedDataMasterHex(string data)
+        {
+            tbRecievedDataMasterHex.Text += (data + "\r\n");
+        }
+
+        private void setTbRecievedDataMaster(string data)
+        {
+            tbRecievedDataMaster.Text += (data + "\r\n");
+        }
+
+        private void commandTwoAnswer(List<char> received, int i, int lrcSum)
+        {
+            string dataToShow = "";
+            string hexData = "";
+            while (i < (received.Count - 5)) //przed suma kontrolna i delimiterami
+            {
+                hexData += received.ElementAt(i++);
+                hexData += received.ElementAt(i++);
+                int decData = Convert.ToInt32(hexData, 16);
+                lrcSum += decData;
+                char ascii = Convert.ToChar(decData);
+                dataToShow += ascii;
+                hexData = "";
+            }
+            string hexLrc = "";
+            hexLrc += received.ElementAt(i++);
+            hexLrc += received.ElementAt(i++);
+            //
+            byte[] sumByte = BitConverter.GetBytes(lrcSum);
+            int sB = Convert.ToInt32(sumByte[0]);
+            sB = (255 - sB) + 1;
+            string lrc = sB.ToString("X");
+            if (lrc.Length == 1)
+            {
+                lrc = '0' + lrc;
+            }
+
+            if (!hexLrc.Equals(lrc))
+            {
+                MessageBox.Show("Błąd odebranej ramki - złe LRC");
+            }
+            else
+            {
+                string del = "";
+                del += received.ElementAt(i++);
+                del += received.ElementAt(i++);
+                if (!del.Equals("\r\n"))
+                {
+                    MessageBox.Show("Błąd odebranej ramki - nie zgadza sie delimiter");
+                }
+                else
+                {
+                    if (tbRecievedDataMaster.InvokeRequired)
+                    {
+                        tbRecievedDataSlaveCallback call = new tbRecievedDataSlaveCallback(setTbRecievedDataMaster);
+                        this.Invoke(call, dataToShow);
+                    }
+                    else
+                    {
+                        tbRecievedDataMaster.Text += (dataToShow + "\r\n");
+                    }
+                    string hex = convertASCIIToHex(received);
+                    if (tbRecievedDataMasterHex.InvokeRequired)
+                    {
+                        tbRecievedDataSlaveCallback call = new tbRecievedDataSlaveCallback(setTbRecievedDataMasterHex);
+                        this.Invoke(call, hex);
+                    }
+                    else
+                    {
+                        tbRecievedDataMasterHex.Text += (hex + "\r\n");
+                    }
+
                 }
             }
         }
