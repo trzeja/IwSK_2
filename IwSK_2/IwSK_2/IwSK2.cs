@@ -155,7 +155,6 @@ namespace IwSK_2
             //tu mamy w charach ładnie wszystko, tylko na hex trzeba zmienić już do wyświetlania
             tbHexSendFrame.Text = convertASCIIToHex(dataChar);
             int retransmissionCount = 0;
-            port.Write(dataChar.ToArray<char>(), 0, dataChar.Count);
             //TODO - Piotr, numer retransmisji moze być zerowy nie? ale musimy pierwszy raz wyslac ;)
             while (retransmissionCount < retransmissionAmount)
             {
