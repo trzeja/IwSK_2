@@ -505,8 +505,8 @@ namespace IwSK_2
         {
             if (stationType == StationType.Slave) {
                 SerialPort senderPort = (SerialPort)sender;
-
-                for (int i = 0; i < senderPort.BytesToRead; i++)
+                int bytesToRead = senderPort.BytesToRead;
+                for (int i = 0; i < bytesToRead; i++)
                 {
                     //TODO -> tu będzie 
                     int intChar = senderPort.ReadChar();
@@ -525,7 +525,8 @@ namespace IwSK_2
             else //gdy jest masterem
             {
                 SerialPort senderPort = (SerialPort)sender;
-                for (int i=0; i< senderPort.BytesToRead; i++)
+                int bytesToRead = senderPort.BytesToRead;
+                for (int i=0; i< bytesToRead; i++)
                 {
                     int intChar = senderPort.ReadChar();
                     char rChar = Convert.ToChar(intChar);
