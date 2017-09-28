@@ -183,6 +183,10 @@ namespace IwSK_2
                 }
                 break;
             }
+            if (retransmissionCount == retransmissionAmount)
+            {
+                MessageBox.Show("Przekroczono limit retransmisji", "Błąd");
+            }
         }
 
         private string convertASCIIToHex(List<char> data)
